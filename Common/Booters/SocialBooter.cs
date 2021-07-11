@@ -7,13 +7,15 @@
 
     public class SocialBooter : Booter
     {
-        public SocialBooter(string xmlResource) : base(xmlResource)
+        public SocialBooter(string xmlName) : base(xmlName)
         {
         }
 
-        public override void LoadData()
+        protected string SocialData => GetResourceAt(0);
+
+        protected override void LoadData()
         {
-            XmlDocument xmlDocument = Simulator.LoadXML(mXmlResource);
+            XmlDocument xmlDocument = Simulator.LoadXML(SocialData);
             bool isEp5Installed = GameUtils.IsInstalled(ProductVersion.EP5);
             if (xmlDocument is not null)
             {

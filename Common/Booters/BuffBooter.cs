@@ -2,24 +2,18 @@
 {
     using Sims3.Gameplay.ActorSystems;
     using Sims3.Gameplay.Utilities;
-    using Sims3.SimIFace;
-    using Sims3.UI;
 
     public class BuffBooter : Booter
     {
-        public BuffBooter(string xmlResource) : base(xmlResource)
+        public BuffBooter(string xmlName) : base(xmlName)
         {
         }
 
-        public override void LoadData()
-        {
-            AddBuffs(null);
-            UIManager.NewHotInstallStoreBuffData += AddBuffs;
-        }
+        protected string BuffData => GetResourceAt(0);
 
-        public void AddBuffs(ResourceKey[] resourceKeys)
+        protected override void LoadData()
         {
-            if (XmlDbData.ReadData(mXmlResource) is XmlDbData xmlDbData)
+            if (XmlDbData.ReadData(BuffData, true) is XmlDbData xmlDbData)
             {
                 BuffManager.ParseBuffData(xmlDbData, true);
             }
