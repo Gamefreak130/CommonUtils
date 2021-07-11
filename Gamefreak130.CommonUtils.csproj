@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{9F3875BD-538B-4DF6-80B4-85C9AC017518}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Gamefreak130</RootNamespace>
+    <AssemblyName>Gamefreak130.Common</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <LangVersion>preview</LangVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <PlatformTarget>x86</PlatformTarget>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <PlatformTarget>x86</PlatformTarget>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Sims3GameplaySystems">
+      <HintPath>lib\Sims3GameplaySystems_edit.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System">
+      <HintPath>lib\System.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Xml">
+      <HintPath>lib\System.Xml.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="mscorlib">
+      <HintPath>lib\mscorlib.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ScriptCore">
+      <HintPath>lib\ScriptCore.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SimIFace">
+      <HintPath>lib\SimIFace.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Sims3GameplayObjects">
+      <HintPath>lib\Sims3GameplayObjects.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Sims3Metadata">
+      <HintPath>lib\Sims3Metadata.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Sims3StoreObjects">
+      <HintPath>lib\Sims3StoreObjects.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UI">
+      <HintPath>lib\UI_edit.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\Booters\Booter.cs" />
+    <Compile Include="Common\Booters\BuffBooter.cs" />
+    <Compile Include="Common\Buffs\BuffTemporaryTraitEx.cs" />
+    <Compile Include="Common\Helpers\RandomUtilEx.cs" />
+    <Compile Include="Common\LinqBridge\Key.cs" />
+    <Compile Include="Common\LinqBridge\KeyComparer.cs" />
+    <Compile Include="Common\LinqBridge\DelegatingComparer.cs" />
+    <Compile Include="Common\LinqBridge\OrderedEnumerable.cs" />
+    <Compile Include="Common\Helpers\ReflectionEx.cs" />
+    <Compile Include="Common\Tasks\CommonTask.cs" />
+    <Compile Include="Common\Loggers\EventLogger.cs" />
+    <Compile Include="Common\Loggers\ExceptionLogger.cs" />
+    <Compile Include="Common\Structures\IGraph.cs" />
+    <Compile Include="Common\Interactions\InteractionHelper.cs" />
+    <Compile Include="Common\Booters\SocialBooter.cs" />
+    <Compile Include="Common\Interactions\Tunings.cs" />
+    <Compile Include="Common\Structures\IUnweightedGraph.cs" />
+    <Compile Include="Common\Structures\IWeightedGraph.cs" />
+    <Compile Include="Common\Loggers\Logger.cs" />
+    <Compile Include="Common\UI\ColumnDelegateStruct.cs" />
+    <Compile Include="Common\UI\ConditionalActionObject.cs" />
+    <Compile Include="Common\UI\GenerateMenuObject.cs" />
+    <Compile Include="Common\UI\GenericActionObject.cs" />
+    <Compile Include="Common\UI\MenuContainer.cs" />
+    <Compile Include="Common\UI\MenuController.cs" />
+    <Compile Include="Common\UI\MenuObject.cs" />
+    <Compile Include="Common\UI\ObjectPickerDialogEx.cs" />
+    <Compile Include="Common\UI\RowTextFormat.cs" />
+    <Compile Include="Common\UI\SetSimpleDictionaryValueObject.cs" />
+    <Compile Include="Common\UI\SetSimplePropertyObject.cs" />
+    <Compile Include="Common\UI\SetSimpleValueObject.cs" />
+    <Compile Include="Common\UI\UIHelper.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Common\Tasks\RepeatingFunctionTask.cs" />
+    <Compile Include="Common\Structures\UDGraph.cs" />
+    <Compile Include="Common\Structures\UUGraph.cs" />
+    <Compile Include="System\Action.cs" />
+    <Compile Include="System\Func.cs" />
+    <Compile Include="System\ExtensionAttribute.cs" />
+    <Compile Include="System\Linq\Enumerable.Aggregation.cs" />
+    <Compile Include="System\Linq\Enumerable.cs" />
+    <Compile Include="System\Linq\Enumerable.Enumeration.cs" />
+    <Compile Include="System\Linq\IGrouping.cs" />
+    <Compile Include="System\Linq\ILookup.cs" />
+    <Compile Include="System\Linq\IOrderedEnumerable.cs" />
+    <Compile Include="System\Linq\Lookup.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
