@@ -78,6 +78,8 @@
   <ItemGroup>
     <Compile Include="Common\Booters\Booter.cs" />
     <Compile Include="Common\Booters\BuffBooter.cs" />
+    <Compile Include="Common\Booters\DreamTreeBooter.cs" />
+    <Compile Include="Common\Booters\MajorDreamBooter.cs" />
     <Compile Include="Common\Buffs\BuffTemporaryTraitEx.cs" />
     <Compile Include="Common\Helpers\RandomUtilEx.cs" />
     <Compile Include="Common\LinqBridge\Key.cs" />
@@ -125,6 +127,8 @@
     <Compile Include="System\Linq\IOrderedEnumerable.cs" />
     <Compile Include="System\Linq\Lookup.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="README.md" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
