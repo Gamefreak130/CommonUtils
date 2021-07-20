@@ -10,6 +10,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using static Sims3.SimIFace.ResourceUtils;
 
     public class DreamTreeBooter : Booter
     {
@@ -70,7 +71,7 @@
                     string triggerEvent = xmlDbRow.GetString("TriggerEvent");
                     if (!string.IsNullOrEmpty(triggerEvent))
                     {
-                        ParserFunctions.TryParseEnum(triggerEvent, out eventId, EventTypeId.kEventNone);
+                        eventId = ParserFunctions.TryParseEnum(triggerEvent, out EventTypeId triggerEventId, EventTypeId.kEventNone) ? triggerEventId : (EventTypeId)HashString32(triggerEvent);
                     }
                     CASAGSAvailabilityFlags availabilityFlags = CASAGSAvailabilityFlags.None;
                     string speciesAvailability = xmlDbRow.GetString("SpeciesAvailability");

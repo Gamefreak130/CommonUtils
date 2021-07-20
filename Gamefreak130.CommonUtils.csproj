@@ -80,6 +80,7 @@
     <Compile Include="Common\Booters\BuffBooter.cs" />
     <Compile Include="Common\Booters\DreamTreeBooter.cs" />
     <Compile Include="Common\Booters\MajorDreamBooter.cs" />
+    <Compile Include="Common\Booters\ObjectCategoryBooter.cs" />
     <Compile Include="Common\Buffs\BuffTemporaryTraitEx.cs" />
     <Compile Include="Common\Helpers\RandomUtilEx.cs" />
     <Compile Include="Common\LinqBridge\Key.cs" />
