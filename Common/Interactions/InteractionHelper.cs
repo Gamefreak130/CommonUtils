@@ -39,7 +39,7 @@
             {
                 iops = iops.Concat(inventoryIops);
             }
-            if (!iops.Any(iop => iop.GetType() == singleton.GetType()))
+            if (!iops.Any(iop => iop.InteractionDefinition.GetType() == singleton.GetType()))
             {
                 gameObject.AddInteraction(singleton);
                 gameObject.AddInventoryInteraction(singleton);
