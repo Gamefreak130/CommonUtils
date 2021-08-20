@@ -7,6 +7,7 @@
     using Sims3.Gameplay.Skills;
     using Sims3.Gameplay.UI;
     using Sims3.Gameplay.WorldBuilderUtil;
+    using Sims3.SimIFace;
     using Sims3.SimIFace.Enums;
     using System.Collections.Generic;
     using System.Linq;
@@ -39,11 +40,12 @@
             public void AddTemporaryTrait(TraitNames trait, bool hidden)
             {
                 TraitManager traitManager = mTargetSim.TraitManager;
-                if (traitManager.HasElement(trait) || (!hidden && TraitsAdded.Where(guid => TraitManager.GetTraitFromDictionary(guid).IsVisible).Count() == traitManager.CountVisibleTraits()))
+                Trait traitToAdd = TraitManager.GetTraitFromDictionary(trait);
+                if (traitToAdd is null || traitManager.HasElement(trait) || !GameUtils.IsInstalled(traitToAdd.ProductVersion) || (!hidden && TraitsAdded.Where(guid => TraitManager.GetTraitFromDictionary(guid).IsVisible).Count() == traitManager.CountVisibleTraits()))
                 {
                     return;
                 }
-                IEnumerable<Trait> conflictingTraits = traitManager.GetDictionaryConflictingTraits(trait).Where(x => mTargetSim.HasTrait(x.Guid));
+                IEnumerable<Trait> conflictingTraits = traitManager.GetDictionaryConflictingTraits(traitToAdd).Where(x => mTargetSim.HasTrait(x.Guid));
                 if (conflictingTraits.Count() > 0)
                 {
                     foreach (Trait conflictingTrait in conflictingTraits)
@@ -63,13 +65,12 @@
                     TraitsRemoved.Add(randomVisibleElement);
                     traitManager.RemoveElement(randomVisibleElement);
                 }
-                if (traitManager.CanAddTrait((ulong)trait) && traitManager.AddElement(trait))
+                if (traitManager.CanAddTrait(traitToAdd, true) && traitManager.AddElement(trait))
                 {
                     TraitsAdded.Add(trait);
-                    Trait addedTrait = TraitManager.GetTraitFromDictionary(trait);
-                    if (hidden && addedTrait.IsReward)
+                    if (hidden && traitToAdd.IsReward)
                     {
-                        traitManager.mRewardTraits.Remove(addedTrait);
+                        traitManager.mRewardTraits.Remove(traitToAdd);
                     }
                 }
                 if (hidden)
