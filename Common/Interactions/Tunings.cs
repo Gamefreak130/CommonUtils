@@ -7,31 +7,22 @@
     {
         internal static InteractionTuning Inject(Type oldType, Type oldTarget, Type newType, Type newTarget, bool clone)
         {
-            InteractionTuning interactionTuning = null;
-            InteractionTuning result;
-            try
+            InteractionTuning interactionTuning = AutonomyTuning.GetTuning(newType.FullName, newTarget.FullName);
+            if (interactionTuning is null)
             {
-                interactionTuning = AutonomyTuning.GetTuning(newType.FullName, newTarget.FullName);
+                interactionTuning = AutonomyTuning.GetTuning(oldType, oldType.FullName, oldTarget);
                 if (interactionTuning is null)
                 {
-                    interactionTuning = AutonomyTuning.GetTuning(oldType, oldType.FullName, oldTarget);
-                    if (interactionTuning is null)
-                    {
-                        return null;
-                    }
-                    if (clone)
-                    {
-                        interactionTuning = CloneTuning(interactionTuning);
-                    }
-                    AutonomyTuning.AddTuning(newType.FullName, newTarget.FullName, interactionTuning);
+                    return null;
                 }
-                InteractionObjectPair.sTuningCache.Remove(new(newType, newTarget));
+                if (clone)
+                {
+                    interactionTuning = CloneTuning(interactionTuning);
+                }
+                AutonomyTuning.AddTuning(newType.FullName, newTarget.FullName, interactionTuning);
             }
-            catch (Exception)
-            {
-            }
-            result = interactionTuning;
-            return result;
+            InteractionObjectPair.sTuningCache.Remove(new(newType, newTarget));
+            return interactionTuning;
         }
 
         private static InteractionTuning CloneTuning(InteractionTuning oldTuning) => new()
@@ -43,7 +34,7 @@
             CodeVersion = oldTuning.CodeVersion,
             FullInteractionName = oldTuning.FullInteractionName,
             FullObjectName = oldTuning.FullObjectName,
-            mChecks = new(oldTuning.mChecks),
+            mChecks = oldTuning.mChecks is null ? null : new(oldTuning.mChecks),
             mTradeoff = CloneTradeoff(oldTuning.mTradeoff),
             PosturePreconditions = oldTuning.PosturePreconditions,
             ScoringFunction = oldTuning.ScoringFunction,
@@ -56,10 +47,10 @@
         private static Tradeoff CloneTradeoff(Tradeoff old) => new()
         {
             mFlags = old.mFlags,
-            mInputs = new(old.mInputs),
+            mInputs = old.mInputs is null ? null : new(old.mInputs),
             mName = old.mName,
             mNumParameters = old.mNumParameters,
-            mOutputs = new(old.mOutputs),
+            mOutputs = old.mOutputs is null ? null : new(old.mOutputs),
             mVariableRestrictions = old.mVariableRestrictions,
             TimeEstimate = old.TimeEstimate
         };
@@ -70,22 +61,22 @@
             AgeSpeciesAvailabilityFlags = old.AgeSpeciesAvailabilityFlags,
             CareerThresholdType = old.CareerThresholdType,
             CareerThresholdValue = old.CareerThresholdValue,
-            ExcludingBuffs = new(old.ExcludingBuffs),
-            ExcludingTraits = new(old.ExcludingTraits),
+            ExcludingBuffs = old.ExcludingBuffs is null ? null : new(old.ExcludingBuffs),
+            ExcludingTraits = old.ExcludingTraits is null ? null : new(old.ExcludingTraits),
             MoodThresholdType = old.MoodThresholdType,
             MoodThresholdValue = old.MoodThresholdValue,
             MotiveThresholdType = old.MotiveThresholdType,
             MotiveThresholdValue = old.MotiveThresholdValue,
-            RequiredBuffs = new(old.RequiredBuffs),
-            RequiredTraits = new(old.RequiredTraits),
+            RequiredBuffs = old.RequiredBuffs is null ? null : new(old.RequiredBuffs),
+            RequiredTraits = old.RequiredTraits is null ? null : new(old.RequiredTraits),
             SkillThresholdType = old.SkillThresholdType,
             SkillThresholdValue = old.SkillThresholdValue,
             WorldRestrictionType = old.WorldRestrictionType,
             OccultRestrictions = old.OccultRestrictions,
             OccultRestrictionType = old.OccultRestrictionType,
             SnowLevelValue = old.SnowLevelValue,
-            WorldRestrictionWorldNames = new(old.WorldRestrictionWorldNames),
-            WorldRestrictionWorldTypes = new(old.WorldRestrictionWorldTypes)
+            WorldRestrictionWorldNames = old.WorldRestrictionWorldNames is null ? null : new(old.WorldRestrictionWorldNames),
+            WorldRestrictionWorldTypes = old.WorldRestrictionWorldTypes is null ? null : new(old.WorldRestrictionWorldTypes)
         };
     }
 }
