@@ -16,7 +16,7 @@
         /// <param name="u">The first vertex of the edge</param>
         /// <param name="v">The second vertex of the edge</param>
         /// <param name="weight">The weight value of the edge, if it exists</param>
-        /// <returns><c>true</c> if an edge between <paramref name="u"/> and <paramref name="v"/> exists in the graph; otherwise, <c>false</c></returns>
+        /// <returns><see langword="true"/> if an edge between <paramref name="u"/> and <paramref name="v"/> exists in the graph; otherwise, <see langword="false"/></returns>
         public bool TryGetEdge(T u, T v, out int weight);
     }
 }

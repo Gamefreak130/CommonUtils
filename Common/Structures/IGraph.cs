@@ -38,7 +38,7 @@
         /// Determines whether the graph contains a given item
         /// </summary>
         /// <param name="item">The item to search for</param>
-        /// <returns><c>true</c> if <paramref name="item"/> is contained in the graph; otherwise, <c>false</c></returns>
+        /// <returns><see langword="true"/> if <paramref name="item"/> is contained in the graph; otherwise, <see langword="false"/></returns>
         public bool ContainsNode(T item);
 
         /// <summary>
