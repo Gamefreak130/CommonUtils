@@ -24,9 +24,9 @@
             {
                 LoadData();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                ExceptionLogger.sInstance.Log(e);
+                ExceptionLogger.sInstance.Log(ex);
             }
         }
 

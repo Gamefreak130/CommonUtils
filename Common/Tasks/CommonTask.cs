@@ -24,9 +24,13 @@
             {
                 Run();
             }
-            catch (Exception e)
+            catch (ResetException)
             {
-                ExceptionLogger.sInstance.Log(e);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.sInstance.Log(ex);
             }
             finally
             {
