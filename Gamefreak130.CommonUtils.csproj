@@ -89,6 +89,7 @@
     <Compile Include="Common\LinqBridge\OrderedEnumerable.cs" />
     <Compile Include="Common\Helpers\ReflectionEx.cs" />
     <Compile Include="Common\Settings.cs" />
+    <Compile Include="Common\Situations\CommonRootSituation.cs" />
     <Compile Include="Common\Tasks\CommonTask.cs" />
     <Compile Include="Common\Loggers\EventLogger.cs" />
     <Compile Include="Common\Loggers\ExceptionLogger.cs" />
