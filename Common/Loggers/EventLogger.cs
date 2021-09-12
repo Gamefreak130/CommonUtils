@@ -11,14 +11,14 @@
     {
         public override void Log(T input) => WriteLog(new(input.ToString()));
 
-        protected override void WriteLog(StringBuilder content, string fileName)
+        protected override void WriteLog(StringBuilder content)
         {
             StringBuilder log = new();
             log.AppendLine("Logged At:");
             log.AppendLine($" Sim Time: {SimClock.CurrentTime()}");
             log.AppendLine(" Real Time: " + DateTime.Now + Environment.NewLine);
             log.Append(content);
-            base.WriteLog(content, fileName);
+            base.WriteLog(log);
         }
     }
 }

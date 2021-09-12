@@ -1,7 +1,9 @@
 ﻿namespace Gamefreak130.Common.Loggers
 {
+    using Sims3.Gameplay;
     using Sims3.Gameplay.Utilities;
     using Sims3.SimIFace;
+    using Sims3.UI;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -27,14 +29,12 @@
 
         public abstract void Log(T input);
 
-        protected void WriteLog(StringBuilder content) => WriteLog(content, $"ScriptError_{sName}_{DateTime.Now:M-d-yyyy_hh-mm-ss}__");
-
-        protected virtual void WriteLog(StringBuilder content, string fileName)
+        protected virtual void WriteLog(StringBuilder content)
         {
             uint fileHandle = 0;
             try
             {
-                Simulator.CreateExportFile(ref fileHandle, fileName);
+                Simulator.CreateExportFile(ref fileHandle, $"ScriptError_{sName}_{DateTime.Now:M-d-yyyy_hh-mm-ss}__");
                 if (fileHandle != 0)
                 {
                     CustomXmlWriter xmlWriter = new(fileHandle);
@@ -87,8 +87,24 @@
             return result;
         }
 
-        protected virtual void Notify()
+        private void Notify() => Notify(WriteNotification());
+
+        private void Notify(string notification)
         {
+            if (!string.IsNullOrEmpty(notification))
+            {
+                if (GameStates.IsInWorld())
+                {
+                    StyledNotification.Show(new(notification, StyledNotification.NotificationStyle.kSystemMessage));
+                }
+                else
+                {
+                    SimpleMessageDialog.Show(sName, notification);
+                }
+            }
         }
+
+        protected virtual string WriteNotification()
+            => string.Empty;
     }
 }
