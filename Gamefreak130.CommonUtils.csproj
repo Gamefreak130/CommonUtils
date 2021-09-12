@@ -82,12 +82,14 @@
     <Compile Include="Common\Booters\MajorDreamBooter.cs" />
     <Compile Include="Common\Booters\ObjectCategoryBooter.cs" />
     <Compile Include="Common\Buffs\BuffTemporaryTraitEx.cs" />
+    <Compile Include="Common\Listeners\EventHelper.cs" />
     <Compile Include="Common\Helpers\RandomUtilEx.cs" />
     <Compile Include="Common\LinqBridge\Key.cs" />
     <Compile Include="Common\LinqBridge\KeyComparer.cs" />
     <Compile Include="Common\LinqBridge\DelegatingComparer.cs" />
     <Compile Include="Common\LinqBridge\OrderedEnumerable.cs" />
     <Compile Include="Common\Helpers\ReflectionEx.cs" />
+    <Compile Include="Common\Listeners\SafeProcessEventDelegate.cs" />
     <Compile Include="Common\Settings.cs" />
     <Compile Include="Common\Situations\CommonRootSituation.cs" />
     <Compile Include="Common\Tasks\CommonTask.cs" />
