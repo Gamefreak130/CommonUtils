@@ -5,5 +5,5 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Style", "IDE0011:Add braces", Justification = "I don't want to have to refactor any of this lol", Scope = "namespaceanddescendants", Target = "~N:System.Linq")]
+[assembly: SuppressMessage("Style", "IDE0011:Add braces", Justification = "I don't want to have to refactor any of this lol", Scope = "namespaceanddescendants", Target = "~N:System")]
 [assembly: SuppressMessage("Style", "IDE0011:Add braces", Justification = "I don't want to have to refactor any of this lol", Scope = "namespaceanddescendants", Target = "~N:Gamefreak130.Common.LinqBridge")]

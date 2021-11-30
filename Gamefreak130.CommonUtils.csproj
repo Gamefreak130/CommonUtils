@@ -123,6 +123,7 @@
     <Compile Include="System\Action.cs" />
     <Compile Include="System\Func.cs" />
     <Compile Include="System\ExtensionAttribute.cs" />
+    <Compile Include="System\HashSet.cs" />
     <Compile Include="System\Linq\Enumerable.Aggregation.cs" />
     <Compile Include="System\Linq\Enumerable.cs" />
     <Compile Include="System\Linq\Enumerable.Enumeration.cs" />
