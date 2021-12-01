@@ -131,6 +131,7 @@
     <Compile Include="System\Linq\ILookup.cs" />
     <Compile Include="System\Linq\IOrderedEnumerable.cs" />
     <Compile Include="System\Linq\Lookup.cs" />
+    <Compile Include="System\ValueTuple.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

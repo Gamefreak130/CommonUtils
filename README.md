@@ -9,4 +9,6 @@ More specifically, this project contains:
 
 * Quick and dirty HashSet<T> implementation for .NET Framework 2.0 from [Chris Doggett](https://stackoverflow.com/questions/687034/using-hashset-in-c-sharp-2-0-compatible-with-3-5/711335#711335)
 
+* Support for C# 7 value tuples when compiling against .NET Framework 2.0, adapted from [igor-tkachev](https://github.com/igor-tkachev/Portable.System.ValueTuple)
+
 * Modified versions of the core script assemblies which expose all classes and their members. The game's MONO intepreter has no concept of protection levels, so mods compiled against these so-called "unprotected" assemblies will still run without issue.
