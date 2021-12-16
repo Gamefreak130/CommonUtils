@@ -24,7 +24,7 @@
             }
         }
 
-        public HashSet<T> NullSet { get { return new HashSet<T>(); } }
+        public static HashSet<T> NullSet { get { return new HashSet<T>(); } }
 
         #region ICollection<T> Members
 
