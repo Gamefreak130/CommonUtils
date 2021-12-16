@@ -20,6 +20,21 @@
             public static readonly Func<T> Undefined = () => { throw new InvalidOperationException(); };
         }
 
+        private static class Sequence<T>
+        {
+            public static readonly IEnumerable<T> Empty = new T[0];
+        }
+
+        /// <summary>
+        /// Returns an empty <see cref="IEnumerable{T}"/> that has the 
+        /// specified type argument.
+        /// </summary>
+
+        public static IEnumerable<TResult> Empty<TResult>()
+        {
+            return Sequence<TResult>.Empty;
+        }
+
         /// <summary>
         /// Base implementation of First operator.
         /// </summary>

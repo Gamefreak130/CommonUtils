@@ -51,7 +51,7 @@
             get
             {
                 IGrouping<TKey, TElement> result;
-                return _map.TryGetValue(new Key<TKey>(key), out result) ? result : new TElement[0] /* Enumerable.Empty<TElement>() */;
+                return _map.TryGetValue(new Key<TKey>(key), out result) ? result : Enumerable.Empty<TElement>();
             }
         }
 

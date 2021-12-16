@@ -22,16 +22,6 @@
         }
 
         /// <summary>
-        /// Returns an empty <see cref="IEnumerable{T}"/> that has the 
-        /// specified type argument.
-        /// </summary>
-
-        /*public static IEnumerable<TResult> Empty<TResult>()
-        {
-            return Sequence<TResult>.Empty;
-        }*/
-
-        /// <summary>
         /// Converts the elements of an <see cref="IEnumerable"/> to the 
         /// specified type.
         /// </summary>
@@ -1027,10 +1017,5 @@
             var lookup = inner.ToLookup(innerKeySelector, comparer);
             return outer.Select(o => resultSelector(o, lookup[outerKeySelector(o)]));
         }
-
-        /*private static class Sequence<T>
-        {
-            public static readonly IEnumerable<T> Empty = new T[0];
-        }*/
     }
 }
