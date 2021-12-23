@@ -122,7 +122,8 @@
     <Compile Include="Common\Structures\UUGraph.cs" />
     <Compile Include="System\Action.cs" />
     <Compile Include="System\Func.cs" />
-    <Compile Include="System\ExtensionAttribute.cs" />
+    <Compile Include="System\IValueTupleInternal.cs" />
+    <Compile Include="System\Runtime.CompilerServices\ExtensionAttribute.cs" />
     <Compile Include="System\HashSet.cs" />
     <Compile Include="System\Linq\Enumerable.Aggregation.cs" />
     <Compile Include="System\Linq\Enumerable.cs" />
@@ -131,6 +132,9 @@
     <Compile Include="System\Linq\ILookup.cs" />
     <Compile Include="System\Linq\IOrderedEnumerable.cs" />
     <Compile Include="System\Linq\Lookup.cs" />
+    <Compile Include="System\Runtime.CompilerServices\Tuple.cs" />
+    <Compile Include="System\ValueTuple 6-8.cs" />
+    <Compile Include="System\ValueTuple 3-5.cs" />
     <Compile Include="System\ValueTuple.cs" />
   </ItemGroup>
   <ItemGroup>
