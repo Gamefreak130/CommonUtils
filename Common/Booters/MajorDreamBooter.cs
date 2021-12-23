@@ -4,7 +4,6 @@
     using Sims3.Gameplay.Utilities;
     using Sims3.SimIFace;
     using System.Collections.Generic;
-    using System.Linq;
     using static Sims3.SimIFace.ResourceUtils;
 
     public class MajorDreamBooter : DreamTreeBooter
@@ -24,11 +23,12 @@
             if (DreamsAndPromisesManager.sDreamTrees.TryGetValue(HashString64(DreamTree), out DreamTree tree))
             {
                 DreamsAndPromisesManager.sCasFeederTrees.Add(tree);
-                foreach (DreamNodeInstance node in tree.Root.Children
-                                                            .Where(nodeBase => GameUtils.IsInstalled(nodeBase.Primitive.RequiredProductVersions))
-                                                            .OfType<DreamNodeInstance>())
+                foreach (DreamNodeInstanceBase nodeBase in tree.Root.Children)
                 {
-                    DreamsAndPromisesManager.sMajorWishes.Add(node.PrimitiveId, node);
+                    if (nodeBase is DreamNodeInstance node && GameUtils.IsInstalled(node.Primitive.RequiredProductVersions))
+                    {
+                        DreamsAndPromisesManager.sMajorWishes.Add(node.PrimitiveId, node);
+                    }
                 }
             }
             ParseLinkedWishes();

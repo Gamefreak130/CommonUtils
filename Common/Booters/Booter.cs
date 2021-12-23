@@ -3,14 +3,13 @@
     using Gamefreak130.Common.Loggers;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Reflection;
 
     public abstract class Booter
     {
         private readonly List<string> mResourceNames;
 
-        public Booter(params string[] resourceNames) => mResourceNames = resourceNames.ToList();
+        public Booter(params string[] resourceNames) => mResourceNames = new(resourceNames);
 
         protected void AddResource(string resourceName) => mResourceNames.Add(resourceName);
 

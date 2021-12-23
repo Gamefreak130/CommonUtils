@@ -6,7 +6,6 @@
     using Sims3.UI;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Reflection;
     using System.Text;
     using Environment = System.Environment;
@@ -19,6 +18,9 @@
             sName = assembly.GetName().Name;
             sModVersion = (Attribute.GetCustomAttribute(assembly, typeof(AssemblyFileVersionAttribute)) as AssemblyFileVersionAttribute).Version;
             sGameVersionData = GameUtils.GetGenericString(GenericStringID.VersionData).Split('\n');
+            sAssemblyNames = new List<Assembly>(AppDomain.CurrentDomain.GetAssemblies())
+                                               .ConvertAll(assembly => assembly.GetName().Name);
+            sAssemblyNames.Sort();
         }
 
         protected static readonly string sName;
@@ -26,6 +28,8 @@
         private static readonly string sModVersion;
 
         private static readonly string[] sGameVersionData;
+
+        private static readonly List<string> sAssemblyNames;
 
         public abstract void Log(T input);
 
@@ -75,12 +79,7 @@
         private StringBuilder GenerateAssemblyList()
         {
             StringBuilder result = new();
-            IEnumerable<string> assemblyNames = from assembly in AppDomain.CurrentDomain.GetAssemblies()
-                                                select assembly.GetName().Name
-                                                into name
-                                                orderby name
-                                                select name;
-            foreach (string name in assemblyNames)
+            foreach (string name in sAssemblyNames)
             {
                 result.AppendLine(" " + name);
             }

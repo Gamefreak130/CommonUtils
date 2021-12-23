@@ -8,7 +8,6 @@
     using Sims3.SimIFace.CAS;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Reflection;
     using static Sims3.SimIFace.ResourceUtils;
 
@@ -31,7 +30,7 @@
             XmlDbData primitivesData = XmlDbData.ReadData(DreamNodePrimitives);
             if (primitivesData is not null)
             {
-                List<DreamNodePrimitive> primitivesToCache = DreamsAndPromisesManager.sNodePrimitves.Values.ToList();
+                List<DreamNodePrimitive> primitivesToCache = new(DreamsAndPromisesManager.sNodePrimitves.Values);
                 ParseNodePrimitives(primitivesData, ref primitivesToCache);
                 if (CacheManager.IsCachingEnabled)
                 {
@@ -44,7 +43,7 @@
             // But since there's no way to inject new primitives then, custom trees will break during parsing and be left empty
             // To delay parsing until the booter can set the primitives up, we store the tree as a generic XML resource instead
             ResourceKey dreamTreeKey = ResourceKey.CreateXMLKey(DreamTree, 0);
-            List<DreamTree> dreamTreesToCache = DreamsAndPromisesManager.sDreamTrees.Values.ToList();
+            List<DreamTree> dreamTreesToCache = new(DreamsAndPromisesManager.sDreamTrees.Values);
             bool flag = DreamsAndPromisesManager.ParseDreamTreeByKey(dreamTreeKey, DreamsAndPromisesManager.ParseDefaults(), ref dreamTreesToCache);
             if (CacheManager.IsCachingEnabled && flag)
             {

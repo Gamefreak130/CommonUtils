@@ -7,7 +7,6 @@
     using Sims3.Gameplay.Interfaces;
     using Sims3.Gameplay.Socializing;
     using System.Collections.Generic;
-    using System.Linq;
 
     public static class InteractionHelper
     {
@@ -34,12 +33,8 @@
 
         public static void AddInteraction(GameObject gameObject, InteractionDefinition singleton)
         {
-            IEnumerable<InteractionObjectPair> iops = gameObject.Interactions;
-            if (gameObject.ItemComp?.InteractionsInventory is IEnumerable<InteractionObjectPair> inventoryIops)
-            {
-                iops = iops.Concat(inventoryIops);
-            }
-            if (!iops.Any(iop => iop.InteractionDefinition.GetType() == singleton.GetType()))
+            if (gameObject.Interactions.TrueForAll(iop => iop.InteractionDefinition.GetType() != singleton.GetType()) 
+                && (gameObject.ItemComp?.InteractionsInventory is not List<InteractionObjectPair> inventoryIops || inventoryIops.TrueForAll(iop => iop.InteractionDefinition.GetType() != singleton.GetType())))
             {
                 gameObject.AddInteraction(singleton);
                 gameObject.AddInventoryInteraction(singleton);
