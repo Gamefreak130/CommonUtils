@@ -2,6 +2,20 @@
 {
     using System.Runtime.Serialization;
 
+    public static class HashSet
+    {
+        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> source)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            // Don't pre-allocate based on knowledge of size, as potentially many elements will be dropped.
+            return new HashSet<T>(source);
+        }
+    }
+
     public class HashSet<T> : ICollection<T>, ISerializable, IDeserializationCallback
     {
         private readonly Dictionary<T, object> dict;
