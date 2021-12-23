@@ -6,7 +6,7 @@
     /// Represents a sorted sequence.
     /// </summary>
 
-    partial interface IOrderedEnumerable<TElement> : IEnumerable<TElement>
+    public partial interface IOrderedEnumerable<TElement> : IEnumerable<TElement>
     {
         /// <summary>
         /// Performs a subsequent ordering on the elements of an 

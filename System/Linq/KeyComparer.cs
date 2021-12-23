@@ -1,4 +1,4 @@
-﻿namespace Gamefreak130.Common.LinqBridge
+﻿namespace System.Linq
 {
     using System.Collections.Generic;
 
@@ -7,7 +7,7 @@
     /// It may be removed or changed in a future version without notice.
     /// </remarks>
 
-    public sealed class KeyComparer<T> : IEqualityComparer<Key<T>>
+    internal sealed class KeyComparer<T> : IEqualityComparer<Key<T>>
     {
         private readonly IEqualityComparer<T> _innerComparer;
 

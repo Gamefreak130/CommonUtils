@@ -1,9 +1,7 @@
-﻿namespace Gamefreak130.Common.LinqBridge
+﻿namespace System.Linq
 {
-    using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
 
     internal sealed class OrderedEnumerable<T, K> : IOrderedEnumerable<T>
     {

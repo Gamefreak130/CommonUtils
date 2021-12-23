@@ -84,10 +84,10 @@
     <Compile Include="Common\Buffs\BuffTemporaryTraitEx.cs" />
     <Compile Include="Common\Listeners\EventHelper.cs" />
     <Compile Include="Common\Helpers\RandomUtilEx.cs" />
-    <Compile Include="Common\LinqBridge\Key.cs" />
-    <Compile Include="Common\LinqBridge\KeyComparer.cs" />
-    <Compile Include="Common\LinqBridge\DelegatingComparer.cs" />
-    <Compile Include="Common\LinqBridge\OrderedEnumerable.cs" />
+    <Compile Include="System\Linq\Key.cs" />
+    <Compile Include="System\Linq\KeyComparer.cs" />
+    <Compile Include="System\Linq\DelegatingComparer.cs" />
+    <Compile Include="System\Linq\OrderedEnumerable.cs" />
     <Compile Include="Common\Helpers\ReflectionEx.cs" />
     <Compile Include="Common\Listeners\SafeProcessEventDelegate.cs" />
     <Compile Include="Common\Settings.cs" />

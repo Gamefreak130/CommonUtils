@@ -1,7 +1,5 @@
 ﻿namespace System.Linq
 {
-    using Gamefreak130.Common.LinqBridge;
-    using System;
     using System.Collections;
     using System.Collections.Generic;
 
@@ -10,7 +8,7 @@
     /// querying objects that implement <see cref="IEnumerable{T}" />.
     /// </summary>
 
-    static partial class Enumerable
+    public static partial class Enumerable
     {
         /// <summary>
         /// Returns the input typed as <see cref="IEnumerable{T}"/>.

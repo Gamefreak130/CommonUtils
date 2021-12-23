@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    static partial class Enumerable
+    public static partial class Enumerable
     {
         private sealed class Grouping<K, V> : List<V>, IGrouping<K, V>
         {

@@ -1,10 +1,9 @@
 ﻿namespace System.Linq
 {
-    using System;
     using System.Collections;
     using System.Collections.Generic;
 
-    static partial class Enumerable
+    public static partial class Enumerable
     {
         /// <summary>
         /// Returns the number of elements in a sequence.

@@ -8,7 +8,7 @@
     /// sequences of values.
     /// </summary>
 
-    partial interface ILookup<TKey, TElement> : IEnumerable<IGrouping<TKey, TElement>>
+    public partial interface ILookup<TKey, TElement> : IEnumerable<IGrouping<TKey, TElement>>
     {
         bool Contains(TKey key);
         int Count { get; }

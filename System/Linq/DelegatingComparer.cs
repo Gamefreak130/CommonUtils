@@ -1,6 +1,5 @@
-﻿namespace Gamefreak130.Common.LinqBridge
+﻿namespace System.Linq
 {
-    using System;
     using System.Collections.Generic;
 
     /// <remarks>
@@ -8,7 +7,7 @@
     /// It may be removed or changed in a future version without notice.
     /// </remarks>
 
-    sealed class DelegatingComparer<T> : IComparer<T>
+    internal sealed class DelegatingComparer<T> : IComparer<T>
     {
         private readonly Func<T, T, int> _comparer;
 
