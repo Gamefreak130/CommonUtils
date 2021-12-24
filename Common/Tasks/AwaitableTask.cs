@@ -1,5 +1,6 @@
 ﻿namespace Gamefreak130.Common.Tasks
 {
+    using Gamefreak130.Common.Helpers;
     using Gamefreak130.Common.Loggers;
     using Sims3.SimIFace;
     using System;
@@ -567,9 +568,8 @@
 
         private void WaitForCompletion(uint delay, StopWatch.TickStyles tickStyles)
         {
-            using (StopWatch timer = StopWatch.Create(tickStyles))
+            using (StopWatch timer = StopWatchEx.StartNew(tickStyles))
             {
-                timer.Start();
                 while (!IsCompleted)
                 {
                     if (timer.GetElapsedTime() > delay)

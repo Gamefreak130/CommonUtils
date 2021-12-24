@@ -82,6 +82,7 @@
     <Compile Include="Common\Booters\MajorDreamBooter.cs" />
     <Compile Include="Common\Booters\ObjectCategoryBooter.cs" />
     <Compile Include="Common\Buffs\BuffTemporaryTraitEx.cs" />
+    <Compile Include="Common\Helpers\StopWatchEx.cs" />
     <Compile Include="Common\Tasks\TaskEx.cs" />
     <Compile Include="Common\Listeners\EventHelper.cs" />
     <Compile Include="Common\Helpers\RandomUtilEx.cs" />

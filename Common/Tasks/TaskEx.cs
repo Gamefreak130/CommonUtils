@@ -1,5 +1,6 @@
 ﻿namespace Gamefreak130.Common.Tasks
 {
+    using Gamefreak130.Common.Helpers;
     using Sims3.SimIFace;
     using System;
 
@@ -29,8 +30,7 @@
 
             protected override void Perform()
             {
-                mTimer = StopWatch.Create(mTickStyles);
-                mTimer.Start();
+                mTimer = StopWatchEx.StartNew(mTickStyles);
                 while (mTimer?.GetElapsedTime() < mDelay)
                 {
                     Yield(true);
