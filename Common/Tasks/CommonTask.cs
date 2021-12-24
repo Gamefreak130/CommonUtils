@@ -6,6 +6,8 @@
 
     public abstract class CommonTask : Task
     {
+        public bool IsStopped => ObjectId.IsValid;
+
         public override void Dispose()
         {
             if (ObjectId != ObjectGuid.InvalidObjectGuid)
@@ -16,13 +18,13 @@
             base.Dispose();
         }
 
-        protected abstract void Run();
+        protected abstract void Perform();
 
         public override void Simulate()
         {
             try
             {
-                Run();
+                Perform();
             }
             catch (ResetException)
             {
@@ -34,8 +36,25 @@
             }
             finally
             {
-                Dispose();
+                try
+                {
+                    Dispose();
+                }
+                catch (ResetException)
+                {
+                }
+                catch (Exception ex)
+                {
+                    ExceptionLogger.sInstance.Log(ex);
+                }
             }
         }
+
+        public override void Stop() => Dispose();
+
+        public virtual ObjectGuid Start() => Simulator.AddObject(this);
+
+        public override string ToString() 
+            => $"{base.ToString()}, ObjectId: {ObjectId}";
     }
 }

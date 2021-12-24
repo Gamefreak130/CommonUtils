@@ -82,6 +82,7 @@
     <Compile Include="Common\Booters\MajorDreamBooter.cs" />
     <Compile Include="Common\Booters\ObjectCategoryBooter.cs" />
     <Compile Include="Common\Buffs\BuffTemporaryTraitEx.cs" />
+    <Compile Include="Common\Tasks\TaskEx.cs" />
     <Compile Include="Common\Listeners\EventHelper.cs" />
     <Compile Include="Common\Helpers\RandomUtilEx.cs" />
     <Compile Include="System\Linq\Key.cs" />
@@ -92,6 +93,8 @@
     <Compile Include="Common\Listeners\SafeProcessEventDelegate.cs" />
     <Compile Include="Common\Settings.cs" />
     <Compile Include="Common\Situations\CommonRootSituation.cs" />
+    <Compile Include="Common\Tasks\ActionTask.cs" />
+    <Compile Include="Common\Tasks\AwaitableTask.cs" />
     <Compile Include="Common\Tasks\CommonTask.cs" />
     <Compile Include="Common\Loggers\EventLogger.cs" />
     <Compile Include="Common\Loggers\ExceptionLogger.cs" />
@@ -102,6 +105,8 @@
     <Compile Include="Common\Structures\IUnweightedGraph.cs" />
     <Compile Include="Common\Structures\IWeightedGraph.cs" />
     <Compile Include="Common\Loggers\Logger.cs" />
+    <Compile Include="Common\Tasks\FunctionTask.cs" />
+    <Compile Include="Common\Tasks\TaskCanceledException.cs" />
     <Compile Include="Common\UI\ColumnDelegateStruct.cs" />
     <Compile Include="Common\UI\ConditionalActionObject.cs" />
     <Compile Include="Common\UI\GenerateMenuObject.cs" />
@@ -121,6 +126,7 @@
     <Compile Include="Common\Structures\UDGraph.cs" />
     <Compile Include="Common\Structures\UUGraph.cs" />
     <Compile Include="System\Action.cs" />
+    <Compile Include="System\AggregateException.cs" />
     <Compile Include="System\Func.cs" />
     <Compile Include="System\IValueTupleInternal.cs" />
     <Compile Include="System\Runtime.CompilerServices\ExtensionAttribute.cs" />
