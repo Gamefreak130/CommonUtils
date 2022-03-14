@@ -60,7 +60,7 @@
             protected AwaitableTask mAntecedent;
 
             public ContinuationActionTask(Action<TTask> action, bool runSynchronously) : this(runSynchronously)
-                => mAction = () => {
+                => mAction = delegate {
                     TTask antecedent = mAntecedent as TTask;
                     mAntecedent = null;
                     action(antecedent); 
@@ -79,7 +79,7 @@
         private class ContinuationActionTask<TTask, TParam> : ContinuationActionTask<TTask> where TTask : AwaitableTask
         {
             public ContinuationActionTask(Action<TTask, TParam> action, TParam param, bool runSynchronously) : base(runSynchronously)
-                => mAction = () => {
+                => mAction = delegate {
                     TTask antecedent = mAntecedent as TTask;
                     mAntecedent = null;
                     action(antecedent, param);
@@ -91,7 +91,7 @@
             protected AwaitableTask mAntecedent;
 
             public ContinuationFuncTask(Func<TTask, TResult> action, bool runSynchronously) : this(runSynchronously) 
-                => mFunc = () => {
+                => mFunc = delegate {
                     TTask antecedent = mAntecedent as TTask;
                     mAntecedent = null;
                     return action(antecedent); 
@@ -110,7 +110,7 @@
         private class ContinuationFuncTask<TTask, TParam, TResult> : ContinuationFuncTask<TTask, TResult> where TTask : AwaitableTask
         {
             public ContinuationFuncTask(Func<TTask, TParam, TResult> action, TParam param, bool runSynchronously) : base(runSynchronously)
-                => mFunc = () => {
+                => mFunc = delegate {
                     TTask antecedent = mAntecedent as TTask;
                     mAntecedent = null;
                     return action(antecedent, param);
@@ -304,7 +304,7 @@
 
             private void ProcessInnerTask(AwaitableTask innerTask)
             {
-                if (innerTask == null)
+                if (innerTask is null)
                 {
                     Cancel();
                     mState = UnwrapPromiseState.Done;
@@ -506,11 +506,7 @@
             }
         }
 
-        public void Cancel()
-        {
-            CancelInternal();
-            Dispose();
-        }
+        public void Cancel() => Dispose(false);
 
         private void CancelInternal()
         {
@@ -525,10 +521,7 @@
 
         protected virtual void Dispose(bool fromSimulator)
         {
-            if (!IsCompleted)
-            {
-                CancelInternal();
-            }
+            CancelInternal();
             if (!fromSimulator)
             {
                 mWrapper?.Dispose(false);
