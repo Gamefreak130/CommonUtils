@@ -1,11 +1,34 @@
 ﻿namespace Gamefreak130.Common.Interactions
 {
     using Sims3.Gameplay.Autonomy;
+    using Sims3.Gameplay.Interactions;
+    using Sims3.Gameplay.Interfaces;
     using System;
 
-    public static class Tunings
+    public static partial class InteractionHelper
     {
-        internal static InteractionTuning Inject(Type oldType, Type oldTarget, Type newType, Type newTarget, bool clone)
+        public static void InjectInteraction<TTarget>(ref InteractionDefinition singleton, InteractionDefinition newSingleton, bool requiresTuning) where TTarget : IGameObject
+            => InjectInteraction<TTarget, InteractionDefinition>(ref singleton, newSingleton, requiresTuning);
+
+        public static void InjectInteraction<TTarget>(ref ISoloInteractionDefinition singleton, ISoloInteractionDefinition newSingleton, bool requiresTuning) where TTarget : IGameObject
+        {
+            if (requiresTuning)
+            {
+                CopyTuning(singleton.GetType(), typeof(TTarget), newSingleton.GetType(), typeof(TTarget), true);
+            }
+            singleton = newSingleton;
+        }
+
+        public static void InjectInteraction<TTarget, TDefinition>(ref TDefinition singleton, TDefinition newSingleton, bool requiresTuning) where TTarget : IGameObject where TDefinition : InteractionDefinition
+        {
+            if (requiresTuning)
+            {
+                CopyTuning(singleton.GetType(), typeof(TTarget), newSingleton.GetType(), typeof(TTarget), true);
+            }
+            singleton = newSingleton;
+        }
+
+        public static InteractionTuning CopyTuning(Type oldType, Type oldTarget, Type newType, Type newTarget, bool clone)
         {
             InteractionTuning interactionTuning = AutonomyTuning.GetTuning(newType.FullName, newTarget.FullName);
             if (interactionTuning is null)

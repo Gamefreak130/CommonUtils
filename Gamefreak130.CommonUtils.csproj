@@ -102,7 +102,7 @@
     <Compile Include="Common\Structures\IGraph.cs" />
     <Compile Include="Common\Interactions\InteractionHelper.cs" />
     <Compile Include="Common\Booters\SocialBooter.cs" />
-    <Compile Include="Common\Interactions\Tunings.cs" />
+    <Compile Include="Common\Interactions\InteractionInjection.cs" />
     <Compile Include="Common\Structures\IUnweightedGraph.cs" />
     <Compile Include="Common\Structures\IWeightedGraph.cs" />
     <Compile Include="Common\Loggers\Logger.cs" />
