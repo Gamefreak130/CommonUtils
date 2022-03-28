@@ -14,7 +14,7 @@
     /// - their members (such as Item1, Item2, etc) are fields rather than properties.
     /// </summary>
     [Serializable]
-    internal partial struct ValueTuple : IEquatable<ValueTuple>,
+    public partial struct ValueTuple : IEquatable<ValueTuple>,
 		IComparable, IComparable<ValueTuple>, IValueTupleInternal
 	{
 		/// <summary>
@@ -169,7 +169,7 @@
     /// <summary>Represents a 1-tuple, or singleton, as a value type.</summary>
 	/// <typeparam name="T1">The type of the tuple's only component.</typeparam>
 	[Serializable]
-    internal struct ValueTuple<T1> : IEquatable<ValueTuple<T1>>,
+    public struct ValueTuple<T1> : IEquatable<ValueTuple<T1>>,
         IComparable, IComparable<ValueTuple<T1>>, IValueTupleInternal
     {
         /// <summary>
@@ -306,7 +306,7 @@
 	/// <typeparam name="T2">The type of the tuple's second component.</typeparam>
 	[Serializable]
     [StructLayout(LayoutKind.Auto)]
-    internal struct ValueTuple<T1, T2> : IEquatable<ValueTuple<T1, T2>>,
+    public struct ValueTuple<T1, T2> : IEquatable<ValueTuple<T1, T2>>,
         IComparable, IComparable<ValueTuple<T1, T2>>, IValueTupleInternal
     {
         /// <summary>

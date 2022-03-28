@@ -13,7 +13,7 @@
     /// - they are mutable rather than readonly, and
     /// - their members (such as Item1, Item2, etc) are fields rather than properties.
     /// </summary>
-    internal partial struct ValueTuple : IEquatable<ValueTuple>,
+    public partial struct ValueTuple : IEquatable<ValueTuple>,
         IComparable, IComparable<ValueTuple>, IValueTupleInternal
     {
         /// <summary>Creates a new struct 6-tuple, or sextuple.</summary>
@@ -85,7 +85,7 @@
     /// <typeparam name="T6">The type of the tuple's sixth component.</typeparam>
     [Serializable]
 	[StructLayout(LayoutKind.Auto)]
-	internal struct ValueTuple<T1,T2,T3,T4,T5,T6> : IEquatable<ValueTuple<T1,T2,T3,T4,T5,T6>>,
+	public struct ValueTuple<T1,T2,T3,T4,T5,T6> : IEquatable<ValueTuple<T1,T2,T3,T4,T5,T6>>,
 		IComparable, IComparable<ValueTuple<T1,T2,T3,T4,T5,T6>>, IValueTupleInternal
 	{
 		/// <summary>
@@ -289,7 +289,7 @@
 	/// <typeparam name="T7">The type of the tuple's seventh component.</typeparam>
 	[Serializable]
 	[StructLayout(LayoutKind.Auto)]
-	internal struct ValueTuple<T1,T2,T3,T4,T5,T6,T7> : IEquatable<ValueTuple<T1,T2,T3,T4,T5,T6,T7>>,
+	public struct ValueTuple<T1,T2,T3,T4,T5,T6,T7> : IEquatable<ValueTuple<T1,T2,T3,T4,T5,T6,T7>>,
 		IComparable, IComparable<ValueTuple<T1,T2,T3,T4,T5,T6,T7>>, IValueTupleInternal
 	{
 		/// <summary>
@@ -505,7 +505,7 @@
 	/// <typeparam name="TRest">The type of the tuple's eighth component.</typeparam>
 	[Serializable]
 	[StructLayout(LayoutKind.Auto)]
-    internal struct ValueTuple<T1,T2,T3,T4,T5,T6,T7, TRest> : IEquatable<ValueTuple<T1,T2,T3,T4,T5,T6,T7, TRest>>,
+    public struct ValueTuple<T1,T2,T3,T4,T5,T6,T7, TRest> : IEquatable<ValueTuple<T1,T2,T3,T4,T5,T6,T7, TRest>>,
 		IComparable, IComparable<ValueTuple<T1,T2,T3,T4,T5,T6,T7, TRest>>, IValueTupleInternal
 		where TRest : struct
 	{
