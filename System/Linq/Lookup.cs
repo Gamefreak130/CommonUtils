@@ -92,4 +92,86 @@
             return GetEnumerator();
         }
     }
+
+    public static partial class Enumerable
+    {
+        /// <summary>
+        /// Creates a <see cref="Lookup{TKey,TElement}" /> from an 
+        /// <see cref="IEnumerable{T}" /> according to a specified key 
+        /// selector function.
+        /// </summary>
+
+        public static ILookup<TKey, TSource> ToLookup<TSource, TKey>(
+            this IEnumerable<TSource> source,
+            Func<TSource, TKey> keySelector)
+        {
+            return ToLookup(source, keySelector, e => e, /* comparer */ null);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="Lookup{TKey,TElement}" /> from an 
+        /// <see cref="IEnumerable{T}" /> according to a specified key 
+        /// selector function and a key comparer.
+        /// </summary>
+
+        public static ILookup<TKey, TSource> ToLookup<TSource, TKey>(
+            this IEnumerable<TSource> source,
+            Func<TSource, TKey> keySelector,
+            IEqualityComparer<TKey> comparer)
+        {
+            return ToLookup(source, keySelector, e => e, comparer);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="Lookup{TKey,TElement}" /> from an 
+        /// <see cref="IEnumerable{T}" /> according to specified key 
+        /// and element selector functions.
+        /// </summary>
+
+        public static ILookup<TKey, TElement> ToLookup<TSource, TKey, TElement>(
+            this IEnumerable<TSource> source,
+            Func<TSource, TKey> keySelector,
+            Func<TSource, TElement> elementSelector)
+        {
+            return ToLookup(source, keySelector, elementSelector, /* comparer */ null);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="Lookup{TKey,TElement}" /> from an 
+        /// <see cref="IEnumerable{T}" /> according to a specified key 
+        /// selector function, a comparer and an element selector function.
+        /// </summary>
+
+        public static ILookup<TKey, TElement> ToLookup<TSource, TKey, TElement>(
+            this IEnumerable<TSource> source,
+            Func<TSource, TKey> keySelector,
+            Func<TSource, TElement> elementSelector,
+            IEqualityComparer<TKey> comparer)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (keySelector == null)
+                throw new ArgumentNullException("keySelector");
+            if (elementSelector == null)
+                throw new ArgumentNullException("elementSelector");
+
+            var lookup = new Lookup<TKey, TElement>(comparer);
+
+            foreach (var item in source)
+            {
+                var key = keySelector(item);
+
+                var grouping = (Grouping<TKey, TElement>)lookup.Find(key);
+                if (grouping == null)
+                {
+                    grouping = new Grouping<TKey, TElement>(key);
+                    lookup.Add(grouping);
+                }
+
+                grouping.Add(elementSelector(item));
+            }
+
+            return lookup;
+        }
+    }
 }
