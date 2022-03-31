@@ -19,7 +19,7 @@
         Faulted
     }
 
-    public abstract class AwaitableTask : IDisposable
+    public abstract partial class AwaitableTask : IDisposable
     {
         private const string kNoTasksMessage = "At least one task must be provided.";
 
@@ -53,68 +53,6 @@
             public override string ToString() => mTaskToRun.ToString() + $", ObjectId: {ObjectId}";
 
             protected sealed override void Perform() => mTaskToRun.Perform();
-        }
-
-        private class ContinuationActionTask<TTask> : ActionTask, IContinuationTask where TTask : AwaitableTask
-        {
-            protected AwaitableTask mAntecedent;
-
-            public ContinuationActionTask(Action<TTask> action, bool runSynchronously) : this(runSynchronously)
-                => mAction = delegate {
-                    TTask antecedent = mAntecedent as TTask;
-                    mAntecedent = null;
-                    action(antecedent); 
-                };
-
-            protected ContinuationActionTask(bool runSynchronously) : base(runSynchronously)
-                => Status = AwaitableTaskStatus.WaitingForContinuation;
-
-            public void StartAsContinuation(AwaitableTask antecedent)
-            {
-                mAntecedent = antecedent;
-                StartInternal();
-            }
-        }
-
-        private class ContinuationActionTask<TTask, TParam> : ContinuationActionTask<TTask> where TTask : AwaitableTask
-        {
-            public ContinuationActionTask(Action<TTask, TParam> action, TParam param, bool runSynchronously) : base(runSynchronously)
-                => mAction = delegate {
-                    TTask antecedent = mAntecedent as TTask;
-                    mAntecedent = null;
-                    action(antecedent, param);
-                };
-        }
-
-        private class ContinuationFuncTask<TTask, TResult> : FunctionTask<TResult>, IContinuationTask where TTask : AwaitableTask
-        {
-            protected AwaitableTask mAntecedent;
-
-            public ContinuationFuncTask(Func<TTask, TResult> action, bool runSynchronously) : this(runSynchronously) 
-                => mFunc = delegate {
-                    TTask antecedent = mAntecedent as TTask;
-                    mAntecedent = null;
-                    return action(antecedent); 
-                };
-
-            protected ContinuationFuncTask(bool runSynchronously) : base(runSynchronously) 
-                => Status = AwaitableTaskStatus.WaitingForContinuation;
-
-            public void StartAsContinuation(AwaitableTask antecedent)
-            {
-                mAntecedent = antecedent;
-                StartInternal();
-            }
-        }
-
-        private class ContinuationFuncTask<TTask, TParam, TResult> : ContinuationFuncTask<TTask, TResult> where TTask : AwaitableTask
-        {
-            public ContinuationFuncTask(Func<TTask, TParam, TResult> action, TParam param, bool runSynchronously) : base(runSynchronously)
-                => mFunc = delegate {
-                    TTask antecedent = mAntecedent as TTask;
-                    mAntecedent = null;
-                    return action(antecedent, param);
-                };
         }
 
         private class WhenAnyPromise<TTask> : AwaitableTask<TTask>, IContinuationTask where TTask : AwaitableTask
@@ -253,115 +191,6 @@
             }
 
             protected override TTask[] GetResult() => mAntecedentTasks;
-        }
-
-        private class UnwrapPromise<TResult> : AwaitableTask<TResult>, IContinuationTask
-        {
-            private enum UnwrapPromiseState : byte
-            {
-                WaitingOnOuterTask, // StartAsContinuation() means "process completed outer task"
-                WaitingOnInnerTask, // StartAsContinuation() means "process completed inner task"
-                Done,               // StartAsContinuation() means "something went wrong and we are hosed!"
-            }
-
-            private UnwrapPromiseState mState;
-
-            private AwaitableTask mFinishingTask;
-
-            public UnwrapPromise(AwaitableTask outerTask) : base(true)
-            {
-                Status = AwaitableTaskStatus.WaitingForContinuation;
-
-                if (outerTask.IsCompleted)
-                {
-                    ProcessCompletedOuterTask(outerTask);
-                }
-                else
-                {
-                    outerTask.AddContinuation(this);
-                }
-            }
-
-            private void ProcessCompletedOuterTask(AwaitableTask outerTask)
-            {
-                mState = UnwrapPromiseState.WaitingOnInnerTask;
-                if (outerTask.IsFaulted || outerTask.IsCanceled)
-                {
-                    TrySetFromTask(outerTask);
-                }
-                else
-                {
-                    AwaitableTask innerTask = outerTask switch
-                    {
-                        AwaitableTask<AwaitableTask> taskOfTask                    => taskOfTask.Await(),
-                        AwaitableTask<AwaitableTask<TResult>> taskOfTaskOfTResult  => taskOfTaskOfTResult.Await(),
-                        _                                                          => throw new Exception("Outer task must be of type AwaitableTask<AwaitableTask> or AwaitableTask<AwaitableTask<TResult>>")
-                    };
-
-                    ProcessInnerTask(innerTask);
-                }
-            }
-
-            private void ProcessInnerTask(AwaitableTask innerTask)
-            {
-                if (innerTask is null)
-                {
-                    Cancel();
-                    mState = UnwrapPromiseState.Done;
-                }
-                else if (innerTask.IsCompleted)
-                {
-                    TrySetFromTask(innerTask);
-                    mState = UnwrapPromiseState.Done;
-                }
-                else
-                {
-                    innerTask.AddContinuation(this);
-                }
-            }
-
-            private void TrySetFromTask(AwaitableTask task)
-            {
-                mFinishingTask = task;
-                StartInternal();
-            }
-
-            protected override TResult GetResult()
-            {
-                AwaitableTask finishingTask = mFinishingTask;
-                mFinishingTask = null;
-                switch (finishingTask.Status)
-                {
-                    case AwaitableTaskStatus.Canceled:
-                        throw new ResetException();
-
-                    case AwaitableTaskStatus.Faulted:
-                        mInnerExceptions = new(finishingTask.Exception.InnerExceptions);
-                        return default;
-
-                    case AwaitableTaskStatus.RanToCompletion:
-                        return finishingTask is AwaitableTask<TResult> taskWithResult ? taskWithResult.Await() : default;
-
-                    default:
-                        throw new Exception("UnwrapPromise in illegal state");
-                }
-            }
-
-            public void StartAsContinuation(AwaitableTask antecedent)
-            {
-                switch (mState)
-                {
-                    case UnwrapPromiseState.WaitingOnOuterTask:
-                        ProcessCompletedOuterTask(antecedent);
-                        break;
-                    case UnwrapPromiseState.WaitingOnInnerTask:
-                        TrySetFromTask(antecedent);
-                        mState = UnwrapPromiseState.Done;
-                        break;
-                    default:
-                        throw new Exception("UnwrapPromise in illegal state");
-                }
-            }
         }
 
         private SimulatorWrapper mWrapper;
@@ -651,50 +480,6 @@
             }
         }
 
-        public AwaitableTask ContinueWith(Action<AwaitableTask> action, bool runSynchronously = false)
-            => ContinueWithInternal(this, action, runSynchronously);
-
-        public AwaitableTask ContinueWith<TParam>(Action<AwaitableTask, TParam> action, TParam param, bool runSynchronously = false)
-            => ContinueWithInternal(this, action, param, runSynchronously);
-
-        public AwaitableTask<TResult> ContinueWith<TResult>(Func<AwaitableTask, TResult> func, bool runSynchronously = false)
-            => ContinueWithInternal(this, func, runSynchronously);
-
-        public AwaitableTask<TResult> ContinueWith<TParam, TResult>(Func<AwaitableTask, TParam, TResult> func, TParam param, bool runSynchronously = false)
-            => ContinueWithInternal(this, func, param, runSynchronously);
-
-        private protected static AwaitableTask ContinueWithInternal<TTask>(TTask antecedent, Action<TTask> action, bool runSynchronously = false)
-            where TTask : AwaitableTask
-        {
-            ContinuationActionTask<TTask> task = new(action, runSynchronously);
-            antecedent.AddContinuation(task);
-            return task;
-        }
-
-        private protected static AwaitableTask ContinueWithInternal<TTask, TParam>(TTask antecedent, Action<TTask, TParam> action, TParam param, bool runSynchronously = false) 
-            where TTask : AwaitableTask
-        {
-            ContinuationActionTask<TTask, TParam> task = new(action, param, runSynchronously);
-            antecedent.AddContinuation(task);
-            return task;
-        }
-
-        private protected static AwaitableTask<TResult> ContinueWithInternal<TTask, TResult>(TTask antecedent, Func<TTask, TResult> func, bool runSynchronously = false) 
-            where TTask : AwaitableTask
-        {
-            ContinuationFuncTask<TTask, TResult> task = new(func, runSynchronously);
-            antecedent.AddContinuation(task);
-            return task;
-        }
-
-        private protected static AwaitableTask<TResult> ContinueWithInternal<TTask, TParam, TResult>(TTask antecedent, Func<TTask, TParam, TResult> func, TParam param, bool runSynchronously = false) 
-            where TTask : AwaitableTask
-        {
-            ContinuationFuncTask<TTask, TParam, TResult> task = new(func, param, runSynchronously);
-            antecedent.AddContinuation(task);
-            return task;
-        }
-
         internal static AwaitableTask<AwaitableTask> WhenAny(params AwaitableTask[] tasks)
             => WhenAnyInternal(tasks);
 
@@ -749,30 +534,6 @@
             return new WhenAllPromise<TResult>(tasksCopy);
         }
 
-        internal static AwaitableTask ContinueWhenAll(AwaitableTask[] tasks, Action<AwaitableTask[]> action, bool runSynchronously = false)
-            => ContinueWhenAllInternal(tasks).ContinueWith((antecedent, action) => action(antecedent.Await()), action, runSynchronously);
-
-        internal static AwaitableTask ContinueWhenAll<TParam>(AwaitableTask[] tasks, Action<AwaitableTask[], TParam> action, TParam param, bool runSynchronously = false)
-            => ContinueWhenAllInternal(tasks).ContinueWith((antecedent, param) => action(antecedent.Await(), param), param, runSynchronously);
-
-        internal static AwaitableTask ContinueWhenAll<TAntecedentResult>(AwaitableTask<TAntecedentResult>[] tasks, Action<AwaitableTask<TAntecedentResult>[]> action, bool runSynchronously = false)
-            => ContinueWhenAllInternal(tasks).ContinueWith((antecedent, action) => action(antecedent.Await()), action, runSynchronously);
-
-        internal static AwaitableTask ContinueWhenAll<TAntecedentResult, TParam>(AwaitableTask<TAntecedentResult>[] tasks, Action<AwaitableTask<TAntecedentResult>[], TParam> action, TParam param, bool runSynchronously = false)
-            => ContinueWhenAllInternal(tasks).ContinueWith((antecedent, param) => action(antecedent.Await(), param), param, runSynchronously);
-
-        internal static AwaitableTask<TResult> ContinueWhenAll<TResult>(AwaitableTask[] tasks, Func<AwaitableTask[], TResult> action, bool runSynchronously = false)
-            => ContinueWhenAllInternal(tasks).ContinueWith((antecedent, action) => action(antecedent.Await()), action, runSynchronously);
-
-        internal static AwaitableTask<TResult> ContinueWhenAll<TParam, TResult>(AwaitableTask[] tasks, Func<AwaitableTask[], TParam, TResult> action, TParam param, bool runSynchronously = false)
-            => ContinueWhenAllInternal(tasks).ContinueWith((antecedent, param) => action(antecedent.Await(), param), param, runSynchronously);
-
-        internal static AwaitableTask<TResult> ContinueWhenAll<TAntecedentResult, TResult>(AwaitableTask<TAntecedentResult>[] tasks, Func<AwaitableTask<TAntecedentResult>[], TResult> action, bool runSynchronously = false)
-            => ContinueWhenAllInternal(tasks).ContinueWith((antecedent, action) => action(antecedent.Await()), action, runSynchronously);
-
-        internal static AwaitableTask<TResult> ContinueWhenAll<TAntecedentResult, TParam, TResult>(AwaitableTask<TAntecedentResult>[] tasks, Func<AwaitableTask<TAntecedentResult>[], TParam, TResult> action, TParam param, bool runSynchronously = false)
-            => ContinueWhenAllInternal(tasks).ContinueWith((antecedent, param) => action(antecedent.Await(), param), param, runSynchronously);
-
         private static AwaitableTask<TTask[]> ContinueWhenAllInternal<TTask>(TTask[] tasks) where TTask : AwaitableTask
         {
             if (tasks.Length == 0)
@@ -784,19 +545,9 @@
             tasks.CopyTo(tasksCopy, 0);
             return new ContinueWhenAllPromise<TTask>(tasks);
         }
-
-        internal static AwaitableTask Unwrap(AwaitableTask<AwaitableTask> task)
-            => task.IsCompletedSuccessfully
-            ? task.Await() ?? TaskEx.FromCanceled()
-            : new UnwrapPromise<object>(task);
-
-        internal static AwaitableTask<TResult> Unwrap<TResult>(AwaitableTask<AwaitableTask<TResult>> task)
-            => task.IsCompletedSuccessfully
-            ? task.Await() ?? TaskEx.FromCanceled<TResult>()
-            : new UnwrapPromise<TResult>(task);
     }
 
-    public abstract class AwaitableTask<TResult> : AwaitableTask
+    public abstract partial class AwaitableTask<TResult> : AwaitableTask
     {
         private TResult mResult;
 
@@ -810,18 +561,6 @@
         protected sealed override void Perform() => mResult = GetResult();
 
         protected abstract TResult GetResult();
-
-        public AwaitableTask ContinueWith(Action<AwaitableTask<TResult>> action, bool runSynchronously = false) 
-            => ContinueWithInternal(this, action, runSynchronously);
-
-        public AwaitableTask ContinueWith<TParam>(Action<AwaitableTask<TResult>, TParam> action, TParam param, bool runSynchronously = false) 
-            => ContinueWithInternal(this, action, param, runSynchronously);
-
-        public AwaitableTask<TFinalResult> ContinueWith<TFinalResult>(Func<AwaitableTask<TResult>, TFinalResult> func, bool runSynchronously = false) 
-            => ContinueWithInternal(this, func, runSynchronously);
-
-        public AwaitableTask<TFinalResult> ContinueWith<TParam, TFinalResult>(Func<AwaitableTask<TResult>, TParam, TFinalResult> func, TParam param, bool runSynchronously = false) 
-            => ContinueWithInternal(this, func, param, runSynchronously);
 
         new public TResult Await()
         {
