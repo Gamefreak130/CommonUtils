@@ -13,4 +13,6 @@ More specifically, this project contains:
 
 * Support for C# 7 value tuples when compiling against .NET Framework 2.0, adapted from [igor-tkachev](https://github.com/igor-tkachev/Portable.System.ValueTuple)
 
+* Support for C# 8 indices and ranges when compiling against .NET Framework 2.0, adapted from [Stuart Lang](https://github.com/slang25/csharp-ranges-compat/)
+
 * Modified versions of the core script assemblies which expose all classes and their members. The game's MONO intepreter has no concept of protection levels, so mods compiled against these so-called "unprotected" assemblies will still run without issue.
