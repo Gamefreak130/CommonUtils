@@ -42,14 +42,9 @@
 
         #region ICollection<T> Members
 
-        public void Add(T item)
+        void ICollection<T>.Add(T item)
         {
-            if (null == item)
-            {
-                throw new ArgumentNullException("item");
-            }
-
-            dict[item] = null;
+            Add(item);
         }
 
         /// <summary>
@@ -120,6 +115,20 @@
         }
 
         #endregion
+
+        public bool Add(T item)
+        {
+            if (null == item)
+            {
+                throw new ArgumentNullException("item");
+            }
+
+            if (dict.ContainsKey(item))
+                return false;
+
+            dict[item] = null;
+            return true;
+        }
 
         public HashSet<T> Union(HashSet<T> set)
         {
