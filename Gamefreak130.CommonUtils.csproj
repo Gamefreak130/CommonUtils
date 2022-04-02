@@ -109,7 +109,9 @@
     <Compile Include="System\Linq\Enumerable\Grouping.cs" />
     <Compile Include="System\Linq\Enumerable\IntersectExcept.cs" />
     <Compile Include="System\Linq\Enumerable\Join.cs" />
-    <Compile Include="System\Linq\Enumerable\MinMax.cs" />
+    <Compile Include="System\Linq\Enumerable\MinMaxImpl.cs" />
+    <Compile Include="System\Linq\Enumerable\Min.cs" />
+    <Compile Include="System\Linq\Enumerable\Max.cs" />
     <Compile Include="System\Linq\Enumerable\OrderBy.cs" />
     <Compile Include="System\Linq\Enumerable\Range.cs" />
     <Compile Include="System\Linq\Enumerable\Repeat.cs" />
