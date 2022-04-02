@@ -1,6 +1,6 @@
 ﻿namespace System.Linq
 {
-    // TODO Prepend, Append, Chunk, Zip
+    using System.Collections;
     using System.Collections.Generic;
 
     /// <summary>
@@ -32,6 +32,40 @@
         }
 
         /// <summary>
+        /// Makes an enumerator seen as enumerable once more.
+        /// </summary>
+        /// <remarks>
+        /// The supplied enumerator must have been started. The first element
+        /// returned is the element the enumerator was on when passed in.
+        /// DO NOT use this method if the caller must be a generator. It is
+        /// mostly safe among aggregate operations.
+        /// </remarks>
+
+        public static IEnumerable<T> Renumerable<T>(this IEnumerator<T> e)
+        {
+            //Debug.Assert(e != null);
+
+            do
+            { yield return e.Current; } while (e.MoveNext());
+        }
+
+        /// <summary>
+        /// Makes an enumerator seen as enumerable once more.
+        /// </summary>
+        /// <remarks>
+        /// The supplied enumerator must have been started. The first element
+        /// returned is the element the enumerator was on when passed in.
+        /// DO NOT use this method if the caller must be a generator. It is
+        /// mostly safe among aggregate operations.
+        /// </remarks>
+
+        public static IEnumerable<T> Renumerable<T>(this IEnumerator e)
+        {
+            do
+            { yield return (T)e.Current; } while (e.MoveNext());
+        }
+
+        /// <summary>
         /// Returns an empty <see cref="IEnumerable{T}"/> that has the 
         /// specified type argument.
         /// </summary>
@@ -40,6 +74,10 @@
         {
             return Sequence<TResult>.Empty;
         }
+
+        /// <summary>
+        /// Returns the input typed as <see cref="IEnumerable{T}"/>.
+        /// </summary>
 
         public static IEnumerable<TResult> AsEnumerable<TResult>(this IEnumerable<TResult> source)
         {

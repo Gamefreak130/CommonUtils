@@ -5,24 +5,6 @@
     public static partial class Enumerable
     {
         /// <summary>
-        /// Makes an enumerator seen as enumerable once more.
-        /// </summary>
-        /// <remarks>
-        /// The supplied enumerator must have been started. The first element
-        /// returned is the element the enumerator was on when passed in.
-        /// DO NOT use this method if the caller must be a generator. It is
-        /// mostly safe among aggregate operations.
-        /// </remarks>
-
-        private static IEnumerable<T> Renumerable<T>(this IEnumerator<T> e)
-        {
-            //Debug.Assert(e != null);
-
-            do
-            { yield return e.Current; } while (e.MoveNext());
-        }
-
-        /// <summary>
         /// Applies an accumulator function over a sequence.
         /// </summary>
 
