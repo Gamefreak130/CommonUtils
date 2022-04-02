@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
 
-    // TODO FirstOrDefault, LastOrDefault with specified default value
     public static partial class Enumerable
     {
         /// <summary>
@@ -67,6 +66,31 @@
             Func<TSource, bool> predicate)
         {
             return FirstOrDefault(source.Where(predicate));
+        }
+
+        /// <summary>
+        /// Returns the first element of a sequence, or a default value if 
+        /// the sequence contains no elements.
+        /// </summary>
+
+        public static TSource FirstOrDefault<TSource>(
+            this IEnumerable<TSource> source, 
+            TSource defaultValue)
+        {
+            return source.FirstImpl(() => defaultValue);
+        }
+
+        /// <summary>
+        /// Returns the first element of the sequence that satisfies a 
+        /// condition or a default value if no such element is found.
+        /// </summary>
+
+        public static TSource FirstOrDefault<TSource>(
+            this IEnumerable<TSource> source,
+            Func<TSource, bool> predicate, 
+            TSource defaultValue)
+        {
+            return FirstOrDefault(source.Where(predicate), defaultValue);
         }
 
         /// <summary>
@@ -139,6 +163,31 @@
             Func<TSource, bool> predicate)
         {
             return LastOrDefault(source.Where(predicate));
+        }
+
+        /// <summary>
+        /// Returns the last element of a sequence, or a default value if 
+        /// the sequence contains no elements.
+        /// </summary>
+
+        public static TSource LastOrDefault<TSource>(
+            this IEnumerable<TSource> source, 
+            TSource defaultValue)
+        {
+            return source.LastImpl(() => defaultValue);
+        }
+
+        /// <summary>
+        /// Returns the last element of a sequence that satisfies a 
+        /// condition or a default value if no such element is found.
+        /// </summary>
+
+        public static TSource LastOrDefault<TSource>(
+            this IEnumerable<TSource> source,
+            Func<TSource, bool> predicate, 
+            TSource defaultValue)
+        {
+            return LastOrDefault(source.Where(predicate), defaultValue);
         }
     }
 }

@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
 
-    // TODO SingleOrDefault with specified default value
     public static partial class Enumerable
     {
         /// <summary>
@@ -79,6 +78,34 @@
             Func<TSource, bool> predicate)
         {
             return SingleOrDefault(source.Where(predicate));
+        }
+
+        /// <summary>
+        /// Returns the only element of a sequence, or a specified default 
+        /// value if the sequence is empty; this method throws an exception if 
+        /// there is more than one element in the sequence.
+        /// </summary>
+
+        public static TSource SingleOrDefault<TSource>(
+            this IEnumerable<TSource> source,
+            TSource defaultValue)
+        {
+            return source.SingleImpl(() => defaultValue);
+        }
+
+        /// <summary>
+        /// Returns the only element of a sequence that satisfies a 
+        /// specified condition, or a specified default value if no such 
+        /// element exists; this method throws an exception if more 
+        /// than one element satisfies the condition.
+        /// </summary>
+
+        public static TSource SingleOrDefault<TSource>(
+            this IEnumerable<TSource> source,
+            Func<TSource, bool> predicate,
+            TSource defaultValue)
+        {
+            return SingleOrDefault(source.Where(predicate), defaultValue);
         }
     }
 }
