@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
 
-    // TODO Take w/ C# 8 range, TakeLast
     public static partial class Enumerable
     {
         /// <summary>

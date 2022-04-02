@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
 
-    // TODO ElementAt, ElementAtOrDefault with C# 8 Index class
     public static partial class Enumerable
     {
         /// <summary>

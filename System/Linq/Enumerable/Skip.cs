@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    // TODO SkipLast
+    // CONSIDER Optimize for lists by going directly to start index and iterating from there
     public static partial class Enumerable
     {
         /// <summary>
