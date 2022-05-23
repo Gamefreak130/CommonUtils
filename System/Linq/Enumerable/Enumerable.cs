@@ -10,16 +10,6 @@
 
     public static partial class Enumerable
     {
-        private sealed class Grouping<K, V> : List<V>, IGrouping<K, V>
-        {
-            internal Grouping(K key)
-            {
-                Key = key;
-            }
-
-            public K Key { get; private set; }
-        }
-
         private static class Futures<T>
         {
             public static readonly Func<T> Default = () => default(T);

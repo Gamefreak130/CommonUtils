@@ -3,6 +3,8 @@
     using System.Collections;
     using System.Collections.Generic;
 
+    // TODO replace internals of this implementation with a PairedListDictionary?
+
     /// <summary>
     /// Represents a collection of keys each mapped to one or more values.
     /// </summary>
@@ -95,6 +97,16 @@
 
     public static partial class Enumerable
     {
+        private sealed class LookupGrouping<K, V> : List<V>, IGrouping<K, V>
+        {
+            internal LookupGrouping(K key)
+            {
+                Key = key;
+            }
+
+            public K Key { get; private set; }
+        }
+
         /// <summary>
         /// Creates a <see cref="Lookup{TKey,TElement}" /> from an 
         /// <see cref="IEnumerable{T}" /> according to a specified key 
@@ -161,10 +173,10 @@
             {
                 var key = keySelector(item);
 
-                var grouping = (Grouping<TKey, TElement>)lookup.Find(key);
+                var grouping = (LookupGrouping<TKey, TElement>)lookup.Find(key);
                 if (grouping == null)
                 {
-                    grouping = new Grouping<TKey, TElement>(key);
+                    grouping = new LookupGrouping<TKey, TElement>(key);
                     lookup.Add(grouping);
                 }
 
