@@ -197,13 +197,35 @@
 
         private Queue<IContinuationTask> mContinuations;
 
+        private Queue<ulong> mAwaitingTaskIds;
+
         private List<Exception> mInnerExceptions;
 
         private bool mExceptionObserved;
 
         private readonly bool mSynchronous;
 
-        public AwaitableTaskStatus Status { get; protected set; }
+        private AwaitableTaskStatus mStatus;
+
+        public AwaitableTaskStatus Status 
+        {
+            get => mStatus;
+            protected set
+            {
+                mStatus = value;
+                if (IsCompleted)
+                {
+                    while (mAwaitingTaskIds?.Count > 0)
+                    {
+                        ulong taskId = mAwaitingTaskIds.Dequeue();
+                        if (taskId != ObjectGuid.kInvalidObjectGuidValue)
+                        {
+                            Simulator.Wake(new(taskId));
+                        }
+                    }
+                }
+            }
+        }
 
         public AggregateException Exception 
         { 
@@ -382,9 +404,11 @@
 
         private void WaitForCompletion()
         {
-            while (!IsCompleted)
+            if (!IsCompleted)
             {
-                TaskEx.Yield(true);
+                mAwaitingTaskIds ??= new(1);
+                mAwaitingTaskIds.Enqueue(Simulator.CurrentTask.Value);
+                TaskEx.Yield(uint.MaxValue, true);
             }
         }
 

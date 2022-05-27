@@ -3,8 +3,6 @@
     using System.Collections;
     using System.Collections.Generic;
 
-    // TODO replace internals of this implementation with a PairedListDictionary?
-
     /// <summary>
     /// Represents a collection of keys each mapped to one or more values.
     /// </summary>
