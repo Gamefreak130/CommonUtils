@@ -172,6 +172,7 @@
     <Compile Include="System\IValueTupleInternal.cs" />
     <Compile Include="System\Linq\Enumerable\Reverse.cs" />
     <Compile Include="System\Range.cs" />
+    <Compile Include="System\Runtime.CompilerServices\IsExternalInit.cs" />
     <Compile Include="System\Runtime.CompilerServices\IsReadOnlyAttribute.cs" />
     <Compile Include="System\Runtime.CompilerServices\ExtensionAttribute.cs" />
     <Compile Include="System\HashSet.cs" />
