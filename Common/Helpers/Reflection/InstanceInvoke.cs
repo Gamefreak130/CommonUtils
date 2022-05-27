@@ -1,112 +1,10 @@
 ﻿namespace Gamefreak130.Common.Helpers
 {
     using System;
-    using System.Linq;
     using System.Reflection;
-    // TODO Breakup
-    public static class ReflectionEx
+
+    public static partial class ReflectionEx
     {
-        /// <summary>
-        /// Given all or part of an assembly name, check if the assembly is loaded
-        /// </summary>
-        /// <param name="str">The assembly name or assembly name substring to match on</param>
-        /// <param name="matchExact"><see cref="true"/> if <paramref name="str"/> must be an entire assembly name; <see cref="false"/> if it can be a substring of an assembly name</param>
-        /// <returns><see langword="true"/> if an assembly matching the search criteria is currently loaded; <see langword="false"/> otherwise</returns>
-        public static bool IsAssemblyLoaded(string str, bool matchExact = true)
-            => AppDomain.CurrentDomain.GetAssemblies()
-                                      .Any(assembly => matchExact
-                                                    ? assembly.GetName().Name == str
-                                                    : assembly.GetName().Name.Contains(str));
-        #region StaticInvoke
-
-        /// <summary>
-        /// Given a method name and containing type name, find and invoke the associated parameterless public static method, discarding any return values
-        /// </summary>
-        /// <param name="assemblyQualifiedTypeName">The assembly-qualified name of the type containing the method</param>
-        /// <param name="methodName">The name of the method to invoke</param>
-        public static void StaticInvoke(string assemblyQualifiedTypeName, string methodName) 
-            => StaticInvoke<object>(Type.GetType(assemblyQualifiedTypeName), methodName, new object[0], new Type[0]);
-
-        /// <summary>
-        /// Given a method name and containing type, find and invoke the associated parameterless public static method, discarding any return values
-        /// </summary>
-        /// <param name="type">The type containing the method</param>
-        /// <param name="methodName">The name of the method to invoke</param>
-        public static void StaticInvoke(Type type, string methodName) 
-            => StaticInvoke<object>(type, methodName, new object[0], new Type[0]);
-
-        /// <summary>
-        /// Given a method name, arguments, and containing type name, find and invoke the associated public static method, discarding any return values
-        /// </summary>
-        /// <param name="assemblyQualifiedTypeName">The assembly-qualified name of the type containing the method</param>
-        /// <param name="methodName">The name of the method to invoke</param>
-        /// <param name="args">An array of the arguments, in order, to pass to the method; or an empty array if the method takes no arguments</param>
-        /// <param name="argTypes">An array of the types of the arguments accepted by the method, in order; or an empty array if the method takes no arguments</param>
-        public static void StaticInvoke(string assemblyQualifiedTypeName, string methodName, object[] args, Type[] argTypes) 
-            => StaticInvoke<object>(Type.GetType(assemblyQualifiedTypeName), methodName, args, argTypes);
-
-        /// <summary>
-        /// Given a method name, arguments, and containing type, find and invoke the associated public static method, discarding any return values
-        /// </summary>
-        /// <param name="type">The type containing the method</param>
-        /// <param name="methodName">The name of the method to invoke</param>
-        /// <param name="args">An array of the arguments, in order, to pass to the method; or an empty array if the method takes no arguments</param>
-        /// <param name="argTypes">An array of the types of the arguments accepted by the method, in order; or an empty array if the method takes no arguments</param>
-        public static void StaticInvoke(Type type, string methodName, object[] args, Type[] argTypes) 
-            => StaticInvoke<object>(type, methodName, args, argTypes);
-
-        /// <summary>
-        /// Given a method name, containing type name, and return type, find and invoke the associated parameterless public static method and return the result
-        /// </summary>
-        /// <typeparam name="T">The return type of the method</typeparam>
-        /// <param name="assemblyQualifiedTypeName">The assembly-qualified name of the type containing the method</param>
-        /// <param name="methodName">The name of the method to invoke</param>
-        /// <returns>The value returned by the method, or <see langword="null"/> if the method's return type is <see langword="void"/></returns>
-        public static T StaticInvoke<T>(string assemblyQualifiedTypeName, string methodName)
-            => StaticInvoke<T>(Type.GetType(assemblyQualifiedTypeName), methodName, new object[0], new Type[0]);
-
-        /// <summary>
-        /// Given a method name, containing type, and return type, find and invoke the associated parameterless public static method and return the result
-        /// </summary>
-        /// <typeparam name="T">The return type of the method</typeparam>
-        /// <param name="type">The type containing the method</param>
-        /// <param name="methodName">The name of the method to invoke</param>
-        /// <returns>The value returned by the method, or <see langword="null"/> if the method's return type is <see langword="void"/></returns>
-        public static T StaticInvoke<T>(Type type, string methodName)
-            => StaticInvoke<T>(type, methodName, new object[0], new Type[0]);
-
-        /// <summary>
-        /// Given a method name, arguments, containing type name, and return type, find and invoke the associated public static method and return the result
-        /// </summary>
-        /// <typeparam name="T">The return type of the method</typeparam>
-        /// <param name="assemblyQualifiedTypeName">The assembly-qualified name of the type containing the method</param>
-        /// <param name="methodName">The name of the method to invoke</param>
-        /// <param name="args">An array of the arguments, in order, to pass to the method; or an empty array if the method takes no arguments</param>
-        /// <param name="argTypes">An array of the types of the arguments accepted by the method, in order; or an empty array if the method takes no arguments</param>
-        /// <returns>The value returned by the method, or <see langword="null"/> if the method's return type is <see langword="void"/></returns>
-        public static T StaticInvoke<T>(string assemblyQualifiedTypeName, string methodName, object[] args, Type[] argTypes) 
-            => StaticInvoke<T>(Type.GetType(assemblyQualifiedTypeName), methodName, args, argTypes);
-
-        /// <summary>
-        /// Given a method name, arguments, containing type, and return type, find and invoke the associated public static method and return the result
-        /// </summary>
-        /// <typeparam name="T">The return type of the method</typeparam>
-        /// <param name="assemblyQualifiedTypeName">The assembly-qualified name of the type containing the method</param>
-        /// <param name="methodName">The name of the method to invoke</param>
-        /// <param name="args">An array of the arguments, in order, to pass to the method; or an empty array if the method takes no arguments</param>
-        /// <param name="argTypes">An array of the types of the arguments accepted by the method, in order; or an empty array if the method takes no arguments</param>
-        /// <returns>The value returned by the method, or <see langword="null"/> if the method's return type is <see langword="void"/></returns>
-        public static T StaticInvoke<T>(Type type, string methodName, object[] args, Type[] argTypes)
-            => type is null
-            ? throw new ArgumentNullException("type")
-            : type.GetMethod(methodName, argTypes) is not MethodInfo method
-            ? throw new MissingMethodException("No public method found in type with specified name and args")
-            : (T)method.Invoke(null, args);
-
-        #endregion
-
-        #region InstanceInvoke
-
         /// <summary>
         /// Given a type name and method name, construct the type using the parameterless constructor, find and invoke the type's associated parameterless public instance method, and discard any return values
         /// </summary>
@@ -256,7 +154,7 @@
         /// <param name="ctorArgTypes">An array of the types of the arguments accepted by the type constructor, in order; or an empty array if the constructor takes no arguments</param>
         /// <param name="methodName">The name of the method to invoke</param>
         /// <returns>The value returned by the method, or <see langword="null"/> if the method's return type is <see langword="void"/></returns>
-        public static T InstanceInvoke<T>(Type type, object[] ctorArgs, Type[] ctorArgTypes, string methodName) 
+        public static T InstanceInvoke<T>(Type type, object[] ctorArgs, Type[] ctorArgTypes, string methodName)
             => InstanceInvoke<T>(type, ctorArgs, ctorArgTypes, methodName, new object[0], new Type[0]);
 
         /// <summary>
@@ -268,7 +166,7 @@
         /// <param name="methodArgs">An array of the arguments, in order, to pass to the method; or an empty array if the method takes no arguments</param>
         /// <param name="methodArgTypes">An array of the types of the arguments accepted by the method, in order; or an empty array if the method takes no arguments</param>
         /// <returns>The value returned by the method, or <see langword="null"/> if the method's return type is <see langword="void"/></returns>
-        public static T InstanceInvoke<T>(string assemblyQualifiedTypeName, string methodName, object[] methodArgs, Type[] methodArgTypes) 
+        public static T InstanceInvoke<T>(string assemblyQualifiedTypeName, string methodName, object[] methodArgs, Type[] methodArgTypes)
             => InstanceInvoke<T>(Type.GetType(assemblyQualifiedTypeName), new object[0], new Type[0], methodName, methodArgs, methodArgTypes);
 
         /// <summary>
@@ -280,7 +178,7 @@
         /// <param name="methodArgs">An array of the arguments, in order, to pass to the method; or an empty array if the method takes no arguments</param>
         /// <param name="methodArgTypes">An array of the types of the arguments accepted by the method, in order; or an empty array if the method takes no arguments</param>
         /// <returns>The value returned by the method, or <see langword="null"/> if the method's return type is <see langword="void"/></returns>
-        public static T InstanceInvoke<T>(Type type, string methodName, object[] methodArgs, Type[] methodArgTypes) 
+        public static T InstanceInvoke<T>(Type type, string methodName, object[] methodArgs, Type[] methodArgTypes)
             => InstanceInvoke<T>(type, new object[0], new Type[0], methodName, methodArgs, methodArgTypes);
 
         /// <summary>
@@ -294,7 +192,7 @@
         /// <param name="methodArgs">An array of the arguments, in order, to pass to the method; or an empty array if the method takes no arguments</param>
         /// <param name="methodArgTypes">An array of the types of the arguments accepted by the method, in order; or an empty array if the method takes no arguments</param>
         /// <returns>The value returned by the method, or <see langword="null"/> if the method's return type is <see langword="void"/></returns>
-        public static T InstanceInvoke<T>(string assemblyQualifiedTypeName, object[] ctorArgs, Type[] ctorArgTypes, string methodName, object[] methodArgs, Type[] methodArgTypes) 
+        public static T InstanceInvoke<T>(string assemblyQualifiedTypeName, object[] ctorArgs, Type[] ctorArgTypes, string methodName, object[] methodArgs, Type[] methodArgTypes)
             => InstanceInvoke<T>(Type.GetType(assemblyQualifiedTypeName), ctorArgs, ctorArgTypes, methodName, methodArgs, methodArgTypes);
 
         /// <summary>
@@ -330,7 +228,5 @@
             : obj.GetType().GetMethod(methodName, methodArgTypes) is not MethodInfo method
             ? throw new MissingMethodException("No public method found in instance with specified name and args")
             : (T)method.Invoke(obj, methodArgs);
-
-        #endregion
     }
 }

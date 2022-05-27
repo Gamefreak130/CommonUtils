@@ -82,6 +82,8 @@
     <Compile Include="Common\Booters\MajorDreamBooter.cs" />
     <Compile Include="Common\Booters\ObjectCategoryBooter.cs" />
     <Compile Include="Common\Buffs\BuffTemporaryTraitEx.cs" />
+    <Compile Include="Common\Helpers\Reflection\InstanceInvoke.cs" />
+    <Compile Include="Common\Helpers\Reflection\StaticInvoke.cs" />
     <Compile Include="Common\Helpers\StopWatchEx.cs" />
     <Compile Include="Common\Tasks\Delay.cs" />
     <Compile Include="Common\Tasks\NopTask.cs" />
@@ -130,7 +132,7 @@
     <Compile Include="System\Linq\KeyComparer.cs" />
     <Compile Include="System\Linq\DelegatingComparer.cs" />
     <Compile Include="System\Linq\OrderedEnumerable.cs" />
-    <Compile Include="Common\Helpers\ReflectionEx.cs" />
+    <Compile Include="Common\Helpers\Reflection\ReflectionEx.cs" />
     <Compile Include="Common\Listeners\SafeProcessEventDelegate.cs" />
     <Compile Include="Common\Settings.cs" />
     <Compile Include="Common\Situations\CommonRootSituation.cs" />
