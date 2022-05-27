@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
 
-    // CONSIDER Optimize for lists by going directly to start index and iterating from there
     public static partial class Enumerable
     {
         /// <summary>
@@ -67,7 +66,20 @@
             this IEnumerable<TSource> source,
             int count)
         {
-            return source.SkipWhile((item, i) => i < count);
+            // TEST
+            return source is List<TSource> list 
+                ? list.SkipYield(count) 
+                : source.SkipWhile((item, i) => i < count);
+        }
+
+        private static IEnumerable<TSource> SkipYield<TSource>(
+            this List<TSource> source,
+            int count)
+        {
+            for (int i = count; i < source.Count; i++)
+            {
+                yield return source[i];
+            }
         }
     }
 }
