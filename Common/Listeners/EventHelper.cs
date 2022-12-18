@@ -26,6 +26,8 @@
             => AddDelegateListenerInternal(id, @delegate, actorHousehold, target, exceptionAction);
 
         private static EventListener AddDelegateListenerInternal(EventTypeId id, ProcessEventDelegate @delegate, ScriptObject s, GameObject target, ListenerAction exceptionAction) 
-            => EventTracker.AddListener(new DelegateListener(id, SafeProcessEventDelegate.Create(@delegate, exceptionAction), s, target));
+            => EventTracker.Instance is not null
+            ? EventTracker.AddListener(new DelegateListener(id, SafeProcessEventDelegate.Create(@delegate, exceptionAction), s, target))
+            : null;
     }
 }
