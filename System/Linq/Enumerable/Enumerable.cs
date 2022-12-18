@@ -14,6 +14,7 @@
         {
             public static readonly Func<T> Default = () => default(T);
             public static readonly Func<T> Undefined = () => { throw new InvalidOperationException(); };
+            public static readonly Func<T, T> Self = x => x;
         }
 
         private static class Sequence<T>

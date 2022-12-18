@@ -66,7 +66,6 @@
             this IEnumerable<TSource> source,
             int count)
         {
-            // TEST
             return source is List<TSource> list 
                 ? list.SkipYield(count) 
                 : source.SkipWhile((item, i) => i < count);

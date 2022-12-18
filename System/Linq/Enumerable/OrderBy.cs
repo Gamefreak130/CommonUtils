@@ -5,6 +5,23 @@
     public static partial class Enumerable
     {
         /// <summary>
+        /// Sorts the elements of a sequence in ascending order.
+        /// </summary>
+        public static IOrderedEnumerable<TSource> Order<TSource>(this IEnumerable<TSource> source)
+        {
+            return source.OrderBy(Futures<TSource>.Self);
+        }
+
+        /// <summary>
+        /// Sorts the elements of a sequence in ascending order by using a 
+        /// specified comparer.
+        /// </summary>
+        public static IOrderedEnumerable<TSource> Order<TSource>(this IEnumerable<TSource> source, IComparer<TSource> comparer)
+        {
+            return source.OrderBy(Futures<TSource>.Self, comparer);
+        }
+
+        /// <summary>
         /// Sorts the elements of a sequence in ascending order according to a key.
         /// </summary>
 
@@ -16,8 +33,8 @@
         }
 
         /// <summary>
-        /// Sorts the elements of a sequence in ascending order by using a 
-        /// specified comparer.
+        /// Sorts the elements of a sequence in ascending order according to a key
+        /// by using a specified comparer.
         /// </summary>
 
         public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(
@@ -34,6 +51,23 @@
         }
 
         /// <summary>
+        /// Sorts the elements of a sequence in descending order.
+        /// </summary>
+        public static IOrderedEnumerable<TSource> OrderDescending<TSource>(this IEnumerable<TSource> source)
+        {
+            return source.OrderByDescending(Futures<TSource>.Self);
+        }
+
+        /// <summary>
+        /// Sorts the elements of a sequence in descending order by using a 
+        /// specified comparer.
+        /// </summary>
+        public static IOrderedEnumerable<TSource> OrderDescending<TSource>(this IEnumerable<TSource> source, IComparer<TSource> comparer)
+        {
+            return source.OrderByDescending(Futures<TSource>.Self, comparer);
+        }
+
+        /// <summary>
         /// Sorts the elements of a sequence in descending order according to a key.
         /// </summary>
 
@@ -45,8 +79,8 @@
         }
 
         /// <summary>
-        ///  Sorts the elements of a sequence in descending order by using a 
-        /// specified comparer. 
+        /// Sorts the elements of a sequence in descending order according to a key
+        /// by using a specified comparer.
         /// </summary>
 
         public static IOrderedEnumerable<TSource> OrderByDescending<TSource, TKey>(
