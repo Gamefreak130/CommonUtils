@@ -66,13 +66,13 @@
             this IEnumerable<TSource> source,
             int count)
         {
-            return source is List<TSource> list 
+            return source is IList<TSource> list 
                 ? list.SkipYield(count) 
                 : source.SkipWhile((item, i) => i < count);
         }
 
         private static IEnumerable<TSource> SkipYield<TSource>(
-            this List<TSource> source,
+            this IList<TSource> source,
             int count)
         {
             for (int i = count; i < source.Count; i++)
