@@ -83,5 +83,33 @@
             }
             return false;
         }
+
+        // The below two methods unsafely allow for multiple references to a single window wrapper
+        // Be sure that the wrapper is properly finalized after acquisition, otherwise undefined behavior and/or memory leaks may occur
+        public static WindowBase GetWindowWrapper(uint winHandle) 
+            => UIManager.mCustomControlInstanceDict.ContainsKey(winHandle)
+            ? UIManager.mCustomControlInstanceDict[winHandle]
+            : UIManager.mControlInstanceCache.ContainsKey(winHandle) 
+            ? UIManager.mControlInstanceCache[winHandle] 
+            : null;
+
+        public static T GetWindowWrapperByType<T>() where T : WindowBase
+        {
+            foreach (WindowBase window in UIManager.mCustomControlInstanceDict.Values)
+            {
+                if (window is T ret)
+                {
+                    return ret;
+                }
+            }
+            foreach (WindowBase window2 in UIManager.mControlInstanceCache.Values)
+            {
+                if (window2 is T ret)
+                {
+                    return ret;
+                }
+            }
+            return null;
+        }
     }
 }
