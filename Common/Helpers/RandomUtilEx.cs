@@ -3,6 +3,7 @@
     using Sims3.Gameplay.Core;
     using Sims3.Gameplay.Interfaces;
     using System;
+    using System.Collections.Generic;
 
     public static class RandomUtilEx
     {
@@ -83,6 +84,51 @@
             }
             chosenWeight = chances[0];
             return results[0];
+        }
+
+        public static void Shuffle<T>(IList<T> values, Random random = null)
+        {
+            int n = values.Count;
+            bool useRandom = random is not null;
+
+            for (int i = 0; i < n - 1; i++)
+            {
+                int j = useRandom ? random.Next(i, n) : RandomUtil.GetInt(i, n);
+
+                if (j != i)
+                {
+                    T temp = values[i];
+                    values[i] = values[j];
+                    values[j] = temp;
+                }
+            }
+        }
+
+        public static IEnumerable<T> GetItems<T>(IList<T> source, int count, Random random = null)
+        {
+            if (count < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(count));
+            }
+
+            T[] items = new T[count];
+            GetItems(source, items, random);
+            return items;
+        }
+
+        public static void GetItems<T>(IList<T> source, T[] destination, Random random = null)
+        {
+            if (source.Count == 0)
+            {
+                throw new ArgumentException("The items list is empty", nameof(source));
+            }
+            bool useRandom = random is not null;
+
+            for (int i = 0; i < destination.Length; i++)
+            {
+                int nextIndex = useRandom ? random.Next(source.Count) : RandomUtil.GetInt(source.Count);
+                destination[i] = source[nextIndex];
+            }
         }
 
         public static bool RandomChance(float chance, Random randomGen) => GetFloat(0f, 100f, randomGen) < chance;
