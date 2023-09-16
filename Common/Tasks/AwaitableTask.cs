@@ -298,7 +298,11 @@
                 Perform();
                 Status = mInnerExceptions is not null ? AwaitableTaskStatus.Faulted : AwaitableTaskStatus.RanToCompletion;
             }
-            catch (Exception ex) when (ex is OperationCanceledException or ResetException)
+            catch (OperationCanceledException)
+            {
+                Status = AwaitableTaskStatus.Canceled;
+            }
+            catch (ResetException)
             {
                 Status = AwaitableTaskStatus.Canceled;
             }
