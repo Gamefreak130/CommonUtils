@@ -4,52 +4,49 @@
 
     public static partial class TaskEx
     {
-        private class NopTask : AwaitableTask
+        public static AwaitableTask CompletedTask
         {
-            public NopTask(bool complete) : base(true)
-                => Status = complete ? AwaitableTaskStatus.RanToCompletion : AwaitableTaskStatus.Canceled;
-
-            public NopTask(Exception exception) : base(true)
+            get
             {
-                AddException(exception);
-                Status = AwaitableTaskStatus.Faulted;
+                TaskCompletionSource source = new();
+                source.SetResult();
+                return source.Task;
             }
-
-            protected override void Perform() => throw new NotSupportedException();
         }
-
-        private class NopTask<TResult> : AwaitableTask<TResult>
-        {
-            public NopTask() : base(true)
-                => Status = AwaitableTaskStatus.Canceled;
-
-            public NopTask(TResult result) : base(result)
-                => Status = AwaitableTaskStatus.RanToCompletion;
-
-            public NopTask(Exception exception) : base(true)
-            {
-                AddException(exception);
-                Status = AwaitableTaskStatus.Faulted;
-            }
-
-            protected override TResult GetResult() => throw new NotSupportedException();
-        }
-
-        public static AwaitableTask CompletedTask => new NopTask(true);
 
         public static AwaitableTask<TResult> FromResult<TResult>(TResult result)
-            => new NopTask<TResult>(result);
+        {
+            TaskCompletionSource<TResult> source = new();
+            source.SetResult(result);
+            return source.Task;
+        }
 
         public static AwaitableTask FromCanceled()
-            => new NopTask(false);
+        {
+            TaskCompletionSource source = new();
+            source.SetCanceled();
+            return source.Task;
+        }
 
         public static AwaitableTask<TResult> FromCanceled<TResult>()
-            => new NopTask<TResult>();
+        {
+            TaskCompletionSource<TResult> source = new();
+            source.SetCanceled();
+            return source.Task;
+        }
 
         public static AwaitableTask FromException(Exception exception)
-            => new NopTask(exception);
+        {
+            TaskCompletionSource source = new();
+            source.SetException(exception);
+            return source.Task;
+        }
 
         public static AwaitableTask<TResult> FromException<TResult>(Exception exception)
-            => new NopTask<TResult>(exception);
+        {
+            TaskCompletionSource<TResult> source = new();
+            source.SetException(exception);
+            return source.Task;
+        }
     }
 }

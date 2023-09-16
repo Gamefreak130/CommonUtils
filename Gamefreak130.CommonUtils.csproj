@@ -87,6 +87,7 @@
     <Compile Include="Common\Helpers\StopWatchEx.cs" />
     <Compile Include="Common\Tasks\Delay.cs" />
     <Compile Include="Common\Tasks\NopTask.cs" />
+    <Compile Include="Common\Tasks\TaskCompletionSource.cs" />
     <Compile Include="Common\Tasks\WhenAnyAll.cs" />
     <Compile Include="Common\Listeners\EventHelper.cs" />
     <Compile Include="Common\Helpers\RandomUtilEx.cs" />

@@ -259,7 +259,7 @@
                     return new(innerExceptions);
                 }
 
-                return canceledException is not null ? (new(canceledException)) : null;
+                return canceledException is not null ? new(canceledException) : null;
             }
         }
 
@@ -298,7 +298,7 @@
                 Perform();
                 Status = mInnerExceptions is not null ? AwaitableTaskStatus.Faulted : AwaitableTaskStatus.RanToCompletion;
             }
-            catch (ResetException)
+            catch (Exception ex) when (ex is OperationCanceledException or ResetException)
             {
                 Status = AwaitableTaskStatus.Canceled;
             }
@@ -579,12 +579,19 @@
         {
         }
 
-        protected AwaitableTask(TResult result) : base(true)
-            => mResult = result;
-
-        protected sealed override void Perform() => mResult = GetResult();
+        protected sealed override void Perform() => TrySetResult(GetResult());
 
         protected abstract TResult GetResult();
+
+        protected bool TrySetResult(TResult result)
+        {
+            if (IsCompleted)
+            {
+                return false;
+            }
+            mResult = result;
+            return true;
+        }
 
         new public TResult Await()
         {
