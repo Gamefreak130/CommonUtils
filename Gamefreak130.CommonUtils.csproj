@@ -93,6 +93,7 @@
     <Compile Include="Common\Helpers\RandomUtilEx.cs" />
     <Compile Include="Common\Tasks\Unwrap.cs" />
     <Compile Include="Common\Tasks\Yield.cs" />
+    <Compile Include="Common\UI\ModalRetriever.cs" />
     <Compile Include="System\Index.cs" />
     <Compile Include="System\Linq\Enumerable\Aggregate.cs" />
     <Compile Include="System\Linq\Enumerable\AnyAll.cs" />
