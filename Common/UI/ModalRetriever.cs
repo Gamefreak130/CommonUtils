@@ -26,11 +26,13 @@
         }
     }
 
-    public class ModalRetriever<T> where T : ModalDialog
+    public class ModalRetriever<T> : IDisposable where T : ModalDialog
     {
         private bool mBootstrapped;
 
         private readonly HashSet<uint> mActiveModals = new();
+
+        private WindowBase mFocusedWindow;
 
         private Action<T> mModalPushed;
 
@@ -49,23 +51,28 @@
             remove => mModalPushed -= value;
         }
 
-        private void OnFocusChange(WindowBase prevFocus, UIEventArgs _)
-        {
-            if (prevFocus is not null)
+        private void SetFocusedWindow(WindowBase window)
+        { 
+            if (mFocusedWindow is not null)
             {
-                prevFocus.FocusLost -= OnFocusChange;
-                prevFocus.Detach -= OnFocusChange;
+                mFocusedWindow.FocusLost -= OnFocusChange;
+                mFocusedWindow.Detach -= OnFocusChange;
             }
-            WindowBase window = UIManager.GetFocus(InputContext.kICKeyboard);
-            if (window is not null)
+            mFocusedWindow = window;
+            if (mFocusedWindow is not null)
             {
                 // Modals are not registered as such by the UIManager until after the focus is set
                 // So we run the modal check as a task to delay its execution
-                Simulator.AddObject(new OneShotFunctionWithParams(RetrieveModal, window));
-                window.FocusLost += OnFocusChange;
-                window.Detach += OnFocusChange;
+                Simulator.AddObject(new OneShotFunctionWithParams(RetrieveModal, mFocusedWindow));
+                mFocusedWindow.FocusLost += OnFocusChange;
+                mFocusedWindow.Detach += OnFocusChange;
             }
         }
+
+        public void Dispose() => SetFocusedWindow(null);
+
+        private void OnFocusChange(WindowBase _, UIEventArgs __) 
+            => SetFocusedWindow(UIManager.GetFocus(InputContext.kICKeyboard));
 
         private void RetrieveModal(object window)
         {
